@@ -1,0 +1,19 @@
+--- a/Makefile.in	2011-02-20 17:55:26.420257717 +0300
++++ b/Makefile.in	2011-02-20 17:56:13.768263891 +0300
+@@ -3,6 +3,7 @@
+ ##   static
+ LIBRARY_TYPE=relocatable
+ DESTDIR ?= 
++GNATFLAGS ?=
+ # Replace with the location for the installation directory
+ INSTALL=@INSTALL@
+ PACKAGE_TARNAME=@PACKAGE_TARNAME@
+@@ -18,7 +19,7 @@
+ docdir=@docdir@
+ includedir=@includedir@
+ 
+-GNATMAKE=@gnatmake@
++GNATMAKE=@gnatmake@ ${GNATFLAGS}
+ 
+ # Compiler mode: one of "distrib", "debug", "optimize", "profile"
+ MODE=distrib
