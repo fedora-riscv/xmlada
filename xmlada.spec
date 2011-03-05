@@ -1,6 +1,6 @@
 Name:       	xmlada
 Version:    	3.2.1
-Release:    	9%{?dist}
+Release:    	10%{?dist}
 Summary:    	XML library for Ada
 Group:      	System Environment/Libraries
 License:    	GPLv2+
@@ -102,6 +102,9 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 
 
 %changelog
+* Tue Mar 01 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-10
+- fix path for fedora-gnat-project-common
+
 * Tue Mar 01 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-9
 - use macros _GNAT_project_di
 - fix hardcode includedir
@@ -109,24 +112,24 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 - fix owned dir
 - fix ?_isa
 
-* Sun Feb 20 2011 Pavel Zhukov <pavel@zhukoff.net> - 3.2.1-8
+* Sun Feb 20 2011 Pavel Zhukov <landgraf@fedoraproject.com> - 3.2.1-8
 - fix spec errors
 - fix directories for rawhide
 - fix gcc-4.6 issues
 - fix libdir
 
-* Fri Feb 11 2011 Pavel Zhukov <pavel@zhukoff.net> - 3.2.1-6
+* Fri Feb 11 2011 Pavel Zhukov <landgraf@fedoraproject.com> - 3.2.1-6
 - move gpr to /usr/share/gpr(/xmlada)
 
-* Mon Feb 7 2011 Pavel Zhukov <pavel@zhukoff.net> - 3.2.1-5
+* Mon Feb 7 2011 Pavel Zhukov <landgraf@fedoraproject.com> - 3.2.1-5
 - move so to -devel package fix spec errors
 
-* Sun Feb 6 2011 Pavel Zhukov <pavel@zhukoff.net> - 3.2.1-4
+* Sun Feb 6 2011 Pavel Zhukov <landgraf@fedoraproject.com> - 3.2.1-4
 - fix dir owner
 
-* Sat Feb 5 2011 Pavel Zhukov <pavel@zhukoff.net> - 3.2.1-3
+* Sat Feb 5 2011 Pavel Zhukov <landgraf@fedoraproject.com> - 3.2.1-3
 - fix errors in Makefile
 - fix files list 
 
-* Fri Feb 4 2011 Pavel Zhukov <pavel@zhukoff.net> - 3.2.1-1
+* Fri Feb 4 2011 Pavel Zhukov <landgraf@fedoraproject.com> - 3.2.1-1
 - Initial spec

@@ -12,7 +12,7 @@
 +    for Source_Dirs use (Directories.Includedir & "/xmlada");
      for Source_List_File use "xmlada/" & Project'Library_Name & ".lgpr";
 -    for Library_Dir use "../xmlada/" & Project'Library_Kind;
-+    for Library_Dir use Directories.Libdir & "xmlada/" & Project'Library_Kind;
++    for Library_Dir use Directories.Libdir & "/xmlada/" & Project'Library_Kind;
      for Library_Version use
         "lib" & Project'Library_Name & ".so." & Xmlada_Shared.Version;
      for Externally_Built use "true";
@@ -31,7 +31,7 @@
 +    for Source_Dirs use (Directories.Includedir & "/xmlada");
      for Source_List_File use "xmlada/" & Project'Library_Name & ".lgpr";
 -    for Library_Dir use "../xmlada/" & Project'Library_Kind;
-+    for Library_Dir use Directories.Libdir & "xmlada/" & Project'Library_Kind;
++    for Library_Dir use Directories.Libdir & "/xmlada/" & Project'Library_Kind;
      for Library_Version use
         "lib" & Project'Library_Name & ".so." & Xmlada_Shared.Version;
      for Externally_Built use "true";
@@ -49,7 +49,7 @@
 +    for Source_Dirs use (Directories.Includedir & "/xmlada");
      for Source_List_File use "xmlada/" & Project'Library_Name & ".lgpr";
 -    for Library_Dir use "../xmlada/" & Project'Library_Kind;
-+    for Library_Dir use Directories.Libdir & "xmlada/" & Project'Library_Kind;
++    for Library_Dir use Directories.Libdir & "/xmlada/" & Project'Library_Kind;
      for Library_Version use
         "lib" & Project'Library_Name & ".so." & Xmlada_Shared.Version;
      for Externally_Built use "true";
@@ -74,7 +74,7 @@
 +    for Source_Dirs use (Directories.Includedir & "/xmlada");
      for Source_List_File use "xmlada/" & Project'Library_Name & ".lgpr";
 -    for Library_Dir use "../xmlada/" & Project'Library_Kind;
-+    for Library_Dir use Directories.Libdir & "xmlada/" & Project'Library_Kind;
++    for Library_Dir use Directories.Libdir & "/xmlada/" & Project'Library_Kind;
      for Library_Version use
         "lib" & Project'Library_Name & ".so." & Xmlada_Shared.Version;
      for Externally_Built use "true";
@@ -91,7 +91,7 @@
 +    for Source_Dirs use (Directories.Includedir & "/xmlada");
      for Source_List_File use "xmlada/" & Project'Library_Name & ".lgpr";
 -    for Library_Dir use "../xmlada/" & Project'Library_Kind;
-+    for Library_Dir use Directories.Libdir & "xmlada/" & Project'Library_Kind;
++    for Library_Dir use Directories.Libdir & "/xmlada/" & Project'Library_Kind;
      for Library_Version use
         "lib" & Project'Library_Name & ".so." & Xmlada_Shared.Version;
      for Externally_Built use "true";
