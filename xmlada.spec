@@ -102,6 +102,9 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 
 
 %changelog
+* Fri Mar 18 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-10
+- Fix #688986
+
 * Tue Mar 01 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-9
 - use macros _GNAT_project_di
 - fix hardcode includedir
