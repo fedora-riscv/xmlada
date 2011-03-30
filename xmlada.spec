@@ -17,8 +17,6 @@ Patch2:	    	%{name}-gnatflags.patch
 BuildRequires:  chrpath
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
-# gcc-gnat only available on these:
-ExclusiveArch: %{ix86} x86_64 ia64 ppc ppc64 alpha
 
 %description
 XML/Ada includes support for parsing XML files, including DTDs, 
@@ -43,7 +41,7 @@ Xml library for ada devel package.
 %patch2 -p1 
 
 %build
-%configure --disable-rpath
+%configure --disable-rpath --enable-shared --disable-static
 make %{?_smp_mflags}  GNATFLAGS="%{GNAT_optflags}" ADA_PROJECT_PATH=%_GNAT_project_dir
 
 
@@ -104,8 +102,8 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 
 
 %changelog
-* Wed Mar 23 2011 Dan Horák <dan[at]danny.cz> - 3.2.1-11
-- updated the supported arch list
+* Wed Mar 30 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-11
+- Fix library type (add configure options)
 
 * Tue Mar 01 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-10
 - fix path for fedora-gnat-project-common
