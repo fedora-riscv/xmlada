@@ -1,19 +1,19 @@
-Name:       	xmlada
-Version:    	4.1
-Release:    	1%{?dist}
-Summary:    	XML library for Ada
-Group:      	System Environment/Libraries
-License:    	GPLv2+
-URL:        	http://libre.adacore.com
+Name:           xmlada
+Version:        4.1
+Release:        2%{?dist}
+Summary:        XML library for Ada
+Group:          System Environment/Libraries
+License:        GPLv2+
+URL:            http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
-Source0:    	xmlada-gpl-%{version}-src.tgz
+Source0:        xmlada-gpl-%{version}-src.tgz
 ## Patch for use relocatable libs instead static 
 ## and add DESTDIR option for make install
-Patch0:     	%{name}-%{version}-destdir.patch
+Patch0:         %{name}-%{version}-destdir.patch
 ## Fedora-specific
-Patch1:     	%{name}-gpr.patch
-Patch2:	    	%{name}-%{version}-gnatflags.patch
+Patch1:         %{name}-gpr.patch
+Patch2:         %{name}-%{version}-gnatflags.patch
 BuildRequires:  chrpath
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
@@ -29,7 +29,7 @@ Summary:        XML library for Ada devel package
 Group:          Development/Libraries
 License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:	fedora-gnat-project-common >= 2
+Requires:       fedora-gnat-project-common >= 2
 
 %description devel
 Xml library for ada devel package.
@@ -62,8 +62,6 @@ install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
 rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 ## only-non-binary-in-usr-lib
-find %{buildroot}/%{_libdir}/ -type f -exec chmod -x {} \;
-find %{buildroot}/%_GNAT_project_dir -type f -exec chmod -x {} \;
 
 %files 
 %defattr(-,root,root,-)
@@ -108,8 +106,9 @@ find %{buildroot}/%_GNAT_project_dir -type f -exec chmod -x {} \;
 
 
 %changelog
-* Sat Jul 15 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 4.1-1
+* Sat Jul 15 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 4.1-2
 - Update to new release GNAT-GPL-2011
+- Fix permissions
 
 * Wed Mar 30 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-11
 - Fix library type (add configure options)
