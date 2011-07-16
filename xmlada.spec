@@ -1,19 +1,19 @@
 Name:       	xmlada
-Version:    	3.2.1
-Release:    	11%{?dist}
+Version:    	4.1
+Release:    	1%{?dist}
 Summary:    	XML library for Ada
 Group:      	System Environment/Libraries
 License:    	GPLv2+
 URL:        	http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
-Source0:    	xmlada-gpl-3.2.1-src.tgz
+Source0:    	xmlada-gpl-%{version}-src.tgz
 ## Patch for use relocatable libs instead static 
 ## and add DESTDIR option for make install
-Patch0:     	%{name}-destdir.patch
+Patch0:     	%{name}-%{version}-destdir.patch
 ## Fedora-specific
 Patch1:     	%{name}-gpr.patch
-Patch2:	    	%{name}-gnatflags.patch
+Patch2:	    	%{name}-%{version}-gnatflags.patch
 BuildRequires:  chrpath
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
@@ -35,7 +35,7 @@ Requires:	fedora-gnat-project-common >= 2
 Xml library for ada devel package.
 
 %prep
-%setup -q -n xmlada-3.2.1-src
+%setup -q -n xmlada-4.1-src
 %patch0 -p1
 %patch1 -p1 
 %patch2 -p1 
@@ -47,18 +47,23 @@ make %{?_smp_mflags}  GNATFLAGS="%{GNAT_optflags}" ADA_PROJECT_PATH=%_GNAT_proje
 
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}  ADA_PROJECT_PATH=%_GNAT_project_dir
+export BUILDS_SHARED=yes
+make install DESTDIR=%{buildroot}  ADA_PROJECT_PATH=%_GNAT_project_dir BUILDS_SHARED=yes
 ## Revoke exec permissions
 find %{buildroot} -name '*.gpr' -exec chmod -x {} \;
 find %{buildroot}%{_docdir} -type f -exec chmod -x {} \;
 ## Delete old bash script (not needed now)
 rm -f %{buildroot}%{_bindir}/xmlada-config
 ## delete rpath manually (#674793)
-chrpath --delete %{buildroot}%{_libdir}/libxmlada*
+chrpath --delete %{buildroot}%{_libdir}/%{name}/relocatable/libxmlada*
 install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
 ## There is not GNAT programming studio in Fedora
 ## To enable GPS plugin delete this string and create subpackage
 rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
+rm -f %{buildroot}/%{_libdir}/%{name}/static/*
+## only-non-binary-in-usr-lib
+find %{buildroot}/%{_libdir}/ -type f -exec chmod -x {} \;
+find %{buildroot}/%_GNAT_project_dir -type f -exec chmod -x {} \;
 
 %files 
 %defattr(-,root,root,-)
@@ -76,6 +81,7 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 %{_docdir}/%{name}/xml.html
 %{_docdir}/%{name}/xml.info
 %{_docdir}/%{name}/xml.pdf
+
 
 
 %files devel
@@ -102,6 +108,9 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 
 
 %changelog
+* Sat Jul 15 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 4.1-1
+- Update to new release GNAT-GPL-2011
+
 * Wed Mar 30 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 3.2.1-11
 - Fix library type (add configure options)
 
