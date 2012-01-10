@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        4.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -106,6 +106,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Tue Jan 10 2012 Pavel Zhukov <landgraf@fedoraproject.org> - 4.1-3
+- Rebuild for new GCC-4.7
+
 * Sat Jul 15 2011 Pavel Zhukov <landgraf@fedoraproject.org> - 4.1-2
 - Update to new release GNAT-GPL-2011
 - Fix permissions
