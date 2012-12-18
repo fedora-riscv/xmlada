@@ -1,6 +1,6 @@
 Name:           xmlada
-Version:        4.1
-Release:        4%{?dist}
+Version:        4.3
+Release:        2%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -8,12 +8,12 @@ URL:            http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
 Source0:        xmlada-gpl-%{version}-src.tgz
+## Fedora-specific
+Patch2:         %{name}-%{version}-gpr.patch
+Patch1:         %{name}-%{version}-gnatflags.patch
 ## Patch for use relocatable libs instead static 
 ## and add DESTDIR option for make install
 Patch0:         %{name}-%{version}-destdir.patch
-## Fedora-specific
-Patch1:         %{name}-gpr.patch
-Patch2:         %{name}-%{version}-gnatflags.patch
 BuildRequires:  chrpath
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
@@ -35,7 +35,7 @@ Requires:       fedora-gnat-project-common >= 2
 Xml library for ada devel package.
 
 %prep
-%setup -q -n xmlada-4.1-src
+%setup -q -n xmlada-%{version}w-src
 %patch0 -p1
 %patch1 -p1 
 %patch2 -p1 
@@ -65,9 +65,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 %files 
 %defattr(-,root,root,-)
-%doc README TODO AUTHORS COPYING
+%doc README TODO AUTHORS COPYING*
 %dir %{_libdir}/%{name}
-%dir %{_docdir}/%{name}
+%{_docdir}/%{name}
 %dir %{_libdir}/%{name}/relocatable
 %dir %{_libdir}/%{name}/static
 %{_libdir}/lib%{name}_dom.so.*
@@ -76,9 +76,6 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 %{_libdir}/lib%{name}_unicode.so.*
 %{_libdir}/lib%{name}_sax.so.*
 %{_libdir}/%{name}/relocatable/lib%{name}*.so.*
-%{_docdir}/%{name}/xml.html
-%{_docdir}/%{name}/xml.info
-%{_docdir}/%{name}/xml.pdf
 
 
 
@@ -106,8 +103,11 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
-* Sun Jul 22 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.1-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+* Tue Dec 18 2012 Pavel Zhukov <landgraf@fedoraproject.org> - 4.3-2
+- Fix gpr patch
+
+* Mon Dec 17 2012 Pavel Zhukov <landgraf@fedoraproject.org> - 4.3-1
+- New release
 
 * Tue Jan 10 2012 Pavel Zhukov <landgraf@fedoraproject.org> - 4.1-3
 - Rebuild for new GCC-4.7

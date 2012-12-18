@@ -1,0 +1,12 @@
+--- a/Makefile.in	2012-12-18 13:41:48.220640609 +0400
++++ b/Makefile.in	2012-12-18 13:42:11.367941179 +0400
+@@ -22,7 +22,8 @@
+ 
+ # Set a default value (ignored if set in the environment)
+ PROCESSORS?=1
+-GNATMAKE=@gnatmake@ -j${PROCESSORS}
++GNATFLAGS ?=
++GNATMAKE=@gnatmake@ ${GNATFLAGS}
+ 
+ # Compiler mode: one of "distrib", "debug", "optimize", "profile", "coverage"
+ MODE=distrib
