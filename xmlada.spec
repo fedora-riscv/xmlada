@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        4.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
