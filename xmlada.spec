@@ -103,6 +103,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Fri Jan 25 2013 Pavel Zhukov <landgraf@fedoraproject.org> - 4.3-3
+- Rebuild with GCC 4.8
+
 * Tue Dec 18 2012 Pavel Zhukov <landgraf@fedoraproject.org> - 4.3-2
 - Fix gpr patch
 
