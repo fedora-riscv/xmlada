@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        4.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -103,6 +103,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Sat Mar 09 2013 Pavel Zhukov <landgraf@fedoraproject.org> - 4.3-5
+- Aws failed to bind with xmlada
+
 * Fri Jan 25 2013 Kevin Fenzi <kevin@scrye.com> 4.3-4
 - Rebuild for new libgnat
 
