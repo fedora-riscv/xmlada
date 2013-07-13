@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -104,9 +104,10 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
-* Sat Jul 13 2013 Pavel ZHukov <landgraf@fedoraproject.org> - 2013-1
+* Sat Jul 13 2013 Pavel ZHukov <landgraf@fedoraproject.org> - 2013-2
 - New release
 - AdaCore has moved to years in version.
+- Fix gpr error
 
 * Sat Mar 09 2013 Pavel Zhukov <landgraf@fedoraproject.org> - 4.3-5
 - Aws failed to bind with xmlada

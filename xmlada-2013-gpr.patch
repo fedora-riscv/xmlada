@@ -102,3 +102,15 @@
      for Library_Dir use Xmlada_Shared.Libdir;
      for Library_Version use
         "lib" & Project'Library_Name
+--- a/distrib/xmlada_unicode.gpr	2013-07-13 11:46:19.044808194 +0200
++++ b/distrib/xmlada_unicode.gpr	2013-07-13 11:46:47.855807337 +0200
+@@ -5,8 +5,8 @@
+     for Library_Name use "xmlada_unicode";
+ 
+     for Library_Kind use Xmlada_Shared.Xmlada_Kind;
+-    for Source_Dirs use ("../../include/xmlada");
+     for Source_Dirs use (Directories.Includedir & "/xmlada");
++    for Source_List_File use "xmlada/" & Project'Library_Name & ".lgpr";
+     for Library_Dir use Xmlada_Shared.Libdir;
+     for Library_Version use
+        "lib" & Project'Library_Name
