@@ -1,13 +1,14 @@
 Name:           xmlada
-Version:        4.3
-Release:        5%{?dist}
+Version:        2013
+Release:        1%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
 URL:            http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
-Source0:        xmlada-gpl-%{version}-src.tgz
+Source0:        xmlada-gpl-2013-src.tgz 
+#Source0:        xmlada-gpl-%{version}-src.tgz
 ## Fedora-specific
 Patch2:         %{name}-%{version}-gpr.patch
 Patch1:         %{name}-%{version}-gnatflags.patch
@@ -35,20 +36,20 @@ Requires:       fedora-gnat-project-common >= 2
 Xml library for ada devel package.
 
 %prep
-%setup -q -n xmlada-%{version}w-src
+%setup -q -n xmlada-gpl-%{version}-src
 %patch0 -p1
 %patch1 -p1 
 %patch2 -p1 
 
 %build
 %configure --disable-rpath --enable-shared --disable-static
-make %{?_smp_mflags}  GNATFLAGS="%{GNAT_optflags}" ADA_PROJECT_PATH=%_GNAT_project_dir
+make %{?_smp_mflags}  GNATFLAGS="%{GNAT_optflags}" ADA_PROJECT_PATH=%_GNAT_project_dir BUILDS_SHARED=yes 
 
 
 %install
 rm -rf %{buildroot}
 export BUILDS_SHARED=yes
-make install DESTDIR=%{buildroot}  ADA_PROJECT_PATH=%_GNAT_project_dir BUILDS_SHARED=yes
+make install DESTDIR=%{buildroot}  ADA_PROJECT_PATH=%_GNAT_project_dir BUILDS_SHARED=yes  LIBDIR=%{_libdir}
 ## Revoke exec permissions
 find %{buildroot} -name '*.gpr' -exec chmod -x {} \;
 find %{buildroot}%{_docdir} -type f -exec chmod -x {} \;
@@ -103,6 +104,10 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Sat Jul 13 2013 Pavel ZHukov <landgraf@fedoraproject.org> - 2013-1
+- New release
+- AdaCore has moved to years in version.
+
 * Sat Mar 09 2013 Pavel Zhukov <landgraf@fedoraproject.org> - 4.3-5
 - Aws failed to bind with xmlada
 

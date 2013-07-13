@@ -1,0 +1,248 @@
+--- a/Makefile.in	2013-07-13 10:05:59.831987250 +0200
++++ b/Makefile.in	2013-07-13 10:09:09.344981612 +0200
+@@ -1,7 +1,8 @@
+ ## The type of library we want to build. Possible values:
+ ##   relocatable
+ ##   static
+-LIBRARY_TYPE=static
++LIBRARY_TYPE=relocatable
++DESTDIR ?= 
+ 
+ # Replace with the location for the installation directory
+ INSTALL=@INSTALL@
+@@ -110,29 +111,29 @@
+ 	cd ${xmllib}; ${CHMOD} ugo-w *.ali
+ 
+ install_dirs: force
+-	@${MKDIR} ${bindir}
+-	@${MKDIR} ${xmllib}
+-	@${MKDIR} ${prefix}/lib/gnat/xmlada
+-	@${MKDIR} ${libdir}
+-	@${MKDIR} ${datadir}/doc/xmlada
+-	@${MKDIR} ${includedir}/xmlada
+-	@${MKDIR} ${datadir}/gps/plug-ins/
++	@${MKDIR} ${DESTDIR}/${bindir}
++	@${MKDIR} ${DESTDIR}/${xmllib}
++	@${MKDIR} ${DESTDIR}/${prefix}/lib/gnat/xmlada
++	@${MKDIR} ${DESTDIR}/${libdir}
++	@${MKDIR} ${DESTDIR}/${datadir}/doc/xmlada
++	@${MKDIR} ${DESTDIR}/${includedir}/xmlada
++	@${MKDIR} ${DESTDIR}/${datadir}/gps/plug-ins/
+ 
+ ## Do the installation for either shared or static, depending on
+ ## $LIBRARY_TYPE
+ install_library_type: install_dirs ${MODULE_INSTALL}
+-	${INSTALL} distrib/xmlada_shared.gpr         ${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada.gpr                ${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_dom.gpr            ${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_sax.gpr            ${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_input.gpr          ${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_schema.gpr         ${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_unicode.gpr        ${prefix}/lib/gnat/
+-	${INSTALL} xmlada-config  ${bindir}
+-	-$(CP) -r docs/_build/html/* $(datadir)/doc/xmlada/ 2>/dev/null
+-	-$(CP) -r docs/_build/latex/XMLAda.pdf $(datadir)/doc/xmlada/ 2>/dev/null
+-	${CHMOD} +x ${bindir}/xmlada-config
+-	${INSTALL} distrib/xmlada_gps.py ${datadir}/gps/plug-ins/
++	${INSTALL} distrib/xmlada_shared.gpr         ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} distrib/xmlada.gpr                ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} distrib/xmlada_dom.gpr            ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} distrib/xmlada_sax.gpr            ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} distrib/xmlada_input.gpr          ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} distrib/xmlada_schema.gpr         ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} distrib/xmlada_unicode.gpr        ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} xmlada-config  ${DESTDIR}/${bindir}
++	-$(CP) -r docs/_build/html/* ${DESTDIR}/$(datadir)/doc/xmlada/ 2>/dev/null
++	-$(CP) -r docs/_build/latex/XMLAda.pdf ${DESTDIR}/$(datadir)/doc/xmlada/ 2>/dev/null
++	${CHMOD} +x ${DESTDIR}/${bindir}/xmlada-config
++	${INSTALL} distrib/xmlada_gps.py ${DESTDIR}/${datadir}/gps/plug-ins/
+ 
+ ## Do the installation for an explicit target
+ install_static: 
+--- a/Makefile.314.in	2013-07-13 10:09:14.277981465 +0200
++++ b/Makefile.314.in	2013-07-13 10:11:12.683977943 +0200
+@@ -1,3 +1,4 @@
++DESTDIR ?=
+ PREFIX=@prefix@
+ BUILD_SHARED=FALSE
+ RANLIB=@RANLIB@
+@@ -15,11 +16,11 @@
+ 	cd ${PREFIX}/include/xmlada; ${CHMOD} -w *.ali
+ 
+ install_dirs: force
+-	${MKDIR} ${PREFIX}/lib
+-	${MKDIR} ${PREFIX}/include/xmlada
+-	${MKDIR} ${PREFIX}/bin
+-	${CP} xmlada-config ${PREFIX}/bin
+-	${CHMOD} +x ${PREFIX}/bin/xmlada-config
++	${MKDIR} ${DESTIR}/${PREFIX}/lib
++	${MKDIR} ${DESTIR}/${PREFIX}/include/xmlada
++	${MKDIR} ${DESTIR}/${PREFIX}/bin
++	${CP} xmlada-config ${DESTIR}/${PREFIX}/bin
++	${CHMOD} +x ${DESTIR}/${PREFIX}/bin/xmlada-config
+ 
+ ${MODULES}: force
+ 	cd $@; ${MAKE} -f ../Makefile.module.314 
+--- a/Makefile.module.314	2013-07-13 10:11:22.609977648 +0200
++++ b/Makefile.module.314	2013-07-13 10:12:45.990975167 +0200
+@@ -10,6 +10,8 @@
+ LN=ln -f -s
+ 
+ BUILD_SHARED=
++ADA_PROJECT_PATH ?=
++DESTDIR ?=
+ PREFIX=
+ MAJOR=
+ MINOR=
+--- a/Makefile.module.314	2013-07-13 10:14:15.854972494 +0200
++++ b/Makefile.module.314	2013-07-13 10:16:24.197968676 +0200
+@@ -11,6 +11,7 @@
+ 
+ BUILD_SHARED=
+ ADA_PROJECT_PATH ?=
++LIBDIR ?=
+ DESTDIR ?=
+ PREFIX=
+ MAJOR=
+@@ -39,12 +40,11 @@
+ ifeq (${BUILD_SHARED}, TRUE)
+ 	cd obj; ${CC} -shared -o ${soname}.so ${OBJ}
+ endif
+-	cd obj; ${CP} *.ali ${PREFIX}/include/xmlada
+-	${CP} *.ad[bs] ${PREFIX}/include/xmlada
+-	cd obj; ${CP} ${libname}.a ${PREFIX}/lib
++	cd obj; ${CP} *.ali ${DESTDIR}/${LIBDIR}/xmlada/
++	${CP} *.ad[bs] ${DESTDIR}/${PREFIX}/include/xmlada
+ ifeq (${BUILD_SHARED}, TRUE)
+-	cd obj; ${CP} ${soname}.so ${PREFIX}/lib
+-	cd ${PREFIX}/lib; ${LN} ${soname}.so ${libname}.so
++	cd obj; ${CP} ${soname}.so ${DESTDIR}/${LIBDIR}
++	cd ${DESTDIR}/${LIBDIR}; ${LN} ${soname}.so ${libname}.so
+ endif
+ 
+ force:
+--- a/Makefile.314.in	2013-07-13 10:19:56.234962369 +0200
++++ b/Makefile.314.in	2013-07-13 10:20:40.494961052 +0200
+@@ -24,7 +24,7 @@
+ 
+ ${MODULES}: force
+ 	cd $@; ${MAKE} -f ../Makefile.module.314 
+-	cd $@; ${MAKE} -f ../Makefile.module.314 MAJOR=${MAJOR} MINOR=${MINOR} PREFIX="${PREFIX}" BUILD_SHARED=${BUILD_SHARED} RANLIB="${RANLIB}" MODULE=$@ lib
++	cd $@; ${MAKE} -f ../Makefile.module.314 MAJOR=${MAJOR} MINOR=${MINOR} DESTDIR="${DESTDIR}" LIBDIR="${LIBDIR}" PREFIX="${PREFIX}" BUILD_SHARED=${BUILD_SHARED} RANLIB="${RANLIB}" MODULE=$@ lib
+ 
+ clean: force
+ 	${RM} ${MODULES:%=%/obj/*} 2>/dev/null
+--- a/Makefile.in	2013-07-13 10:21:58.902958720 +0200
++++ b/Makefile.in	2013-07-13 10:24:54.798953487 +0200
+@@ -88,27 +88,27 @@
+ 
+ # Rule for installing the modules
+ %_inst: force
+-	${CP} $*/*.ad[bs]        ${includedir}/xmlada
+-	cd $*; ls *.ad[bs] > ${prefix}/lib/gnat/xmlada/xmlada_$*.lgpr
+-	-cd ${xmllib}; ${CHMOD} ugo+w *.ali
+-	-${CP} $*/lib/${LIBRARY_TYPE}/*.ali   ${xmllib}
++	${CP} $*/*.ad[bs]        $(DESTDIR)/${includedir}/xmlada
++	cd $*; ls *.ad[bs] > $(DESTDIR)/${prefix}/lib/gnat/xmlada/xmlada_$*.lgpr
++	-cd $(DESTDIR)/${xmllib}; ${CHMOD} ugo+w *.ali
++	-${CP} $*/lib/${LIBRARY_TYPE}/*.ali   $(DESTDIR)/${xmllib}
+ 	${RM} ${libdir}/libxmlada_$**
+ 	${RM} ${xmllib}libxmlada_$**
+ ifeq (${LIBRARY_TYPE},static)
+-	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*.a ${xmllib}
++	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*.a $(DESTDIR)/${xmllib}
+ else
+ ifeq (${LIBEXT},.dll)
+-	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT} ${xmllib}
+-	cd ${bindir}; ${CP} ${libdir}/xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT} libxmlada_$*${LIBEXT}
++	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT} $(DESTDIR)/${xmllib}
++	cd $(DESTDIR)/${bindir}; ${CP} ${libdir}/xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT} libxmlada_$*${LIBEXT}
+ else
+-	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} ${xmllib}
++	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} $(DESTDIR)/${xmllib}
+ 	cd ${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}
+ 	-cd ${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
+ 	cd ${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${VERSION}
+ 	-cd ${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
+ endif
+ endif
+-	cd ${xmllib}; ${CHMOD} ugo-w *.ali
++	cd $(DESTDIR)/${xmllib}; ${CHMOD} ugo-w *.ali
+ 
+ install_dirs: force
+ 	@${MKDIR} ${DESTDIR}/${bindir}
+--- a/Makefile.in	2013-07-13 10:30:22.334943744 +0200
++++ b/Makefile.in	2013-07-13 10:30:49.698942930 +0200
+@@ -92,8 +92,8 @@
+ 	cd $*; ls *.ad[bs] > $(DESTDIR)/${prefix}/lib/gnat/xmlada/xmlada_$*.lgpr
+ 	-cd $(DESTDIR)/${xmllib}; ${CHMOD} ugo+w *.ali
+ 	-${CP} $*/lib/${LIBRARY_TYPE}/*.ali   $(DESTDIR)/${xmllib}
+-	${RM} ${libdir}/libxmlada_$**
+-	${RM} ${xmllib}libxmlada_$**
++	${RM} $(DESTDIR)/${libdir}/libxmlada_$**
++	${RM} $(DESTDIR)/${xmllib}libxmlada_$**
+ ifeq (${LIBRARY_TYPE},static)
+ 	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*.a $(DESTDIR)/${xmllib}
+ else
+--- a/Makefile.in	2013-07-13 10:34:51.431935739 +0200
++++ b/Makefile.in	2013-07-13 10:35:09.178935211 +0200
+@@ -102,10 +102,10 @@
+ 	cd $(DESTDIR)/${bindir}; ${CP} ${libdir}/xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT} libxmlada_$*${LIBEXT}
+ else
+ 	${INSTALL} $*/lib/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} $(DESTDIR)/${xmllib}
+-	cd ${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}
+-	-cd ${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
+-	cd ${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${VERSION}
+-	-cd ${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
++	cd  $(DESTDIR)/${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}
++	-cd  $(DESTDIR)/${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
++	cd  $(DESTDIR)/${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${VERSION}
++	-cd  $(DESTDIR)/${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
+ endif
+ endif
+ 	cd $(DESTDIR)/${xmllib}; ${CHMOD} ugo-w *.ali
+--- a/Makefile.in	2013-07-13 10:37:32.484930948 +0200
++++ b/Makefile.in	2013-07-13 10:38:30.873929211 +0200
+@@ -113,7 +113,7 @@
+ install_dirs: force
+ 	@${MKDIR} ${DESTDIR}/${bindir}
+ 	@${MKDIR} ${DESTDIR}/${xmllib}
+-	@${MKDIR} ${DESTDIR}/${prefix}/lib/gnat/xmlada
++	@${MKDIR} ${DESTDIR}/${ADA_PROJECT_PATH}/xmlada
+ 	@${MKDIR} ${DESTDIR}/${libdir}
+ 	@${MKDIR} ${DESTDIR}/${datadir}/doc/xmlada
+ 	@${MKDIR} ${DESTDIR}/${includedir}/xmlada
+--- a/Makefile.in	2013-07-13 10:41:58.644923031 +0200
++++ b/Makefile.in	2013-07-13 10:42:44.785921658 +0200
+@@ -89,7 +89,7 @@
+ # Rule for installing the modules
+ %_inst: force
+ 	${CP} $*/*.ad[bs]        $(DESTDIR)/${includedir}/xmlada
+-	cd $*; ls *.ad[bs] > $(DESTDIR)/${prefix}/lib/gnat/xmlada/xmlada_$*.lgpr
++	cd $*; ls *.ad[bs] > $(DESTDIR)/${ADA_PROJECT_PATH}/xmlada/xmlada_$*.lgpr
+ 	-cd $(DESTDIR)/${xmllib}; ${CHMOD} ugo+w *.ali
+ 	-${CP} $*/lib/${LIBRARY_TYPE}/*.ali   $(DESTDIR)/${xmllib}
+ 	${RM} $(DESTDIR)/${libdir}/libxmlada_$**
+--- a/Makefile.in	2013-07-13 10:45:14.995917190 +0200
++++ b/Makefile.in	2013-07-13 10:45:43.935916329 +0200
+@@ -122,13 +122,13 @@
+ ## Do the installation for either shared or static, depending on
+ ## $LIBRARY_TYPE
+ install_library_type: install_dirs ${MODULE_INSTALL}
+-	${INSTALL} distrib/xmlada_shared.gpr         ${DESTDIR}/${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada.gpr                ${DESTDIR}/${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_dom.gpr            ${DESTDIR}/${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_sax.gpr            ${DESTDIR}/${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_input.gpr          ${DESTDIR}/${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_schema.gpr         ${DESTDIR}/${prefix}/lib/gnat/
+-	${INSTALL} distrib/xmlada_unicode.gpr        ${DESTDIR}/${prefix}/lib/gnat/
++	${INSTALL} distrib/xmlada_shared.gpr         ${DESTDIR}/${ADA_PROJECT_PATH}/
++	${INSTALL} distrib/xmlada.gpr                ${DESTDIR}/${ADA_PROJECT_PATH}/
++	${INSTALL} distrib/xmlada_dom.gpr            ${DESTDIR}/${ADA_PROJECT_PATH}/
++	${INSTALL} distrib/xmlada_sax.gpr            ${DESTDIR}/${ADA_PROJECT_PATH}/
++	${INSTALL} distrib/xmlada_input.gpr          ${DESTDIR}/${ADA_PROJECT_PATH}/
++	${INSTALL} distrib/xmlada_schema.gpr         ${DESTDIR}/${ADA_PROJECT_PATH}/
++	${INSTALL} distrib/xmlada_unicode.gpr        ${DESTDIR}/${ADA_PROJECT_PATH}/
+ 	${INSTALL} xmlada-config  ${DESTDIR}/${bindir}
+ 	-$(CP) -r docs/_build/html/* ${DESTDIR}/$(datadir)/doc/xmlada/ 2>/dev/null
+ 	-$(CP) -r docs/_build/latex/XMLAda.pdf ${DESTDIR}/$(datadir)/doc/xmlada/ 2>/dev/null
