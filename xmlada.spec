@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -18,6 +18,9 @@ Patch0:         %{name}-%{version}-destdir.patch
 BuildRequires:  chrpath
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
+# xmlada and gcc-gnat only available on these:
+ExclusiveArch: %{ix86} x86_64 ia64 ppc ppc64 alpha
+
 
 %description
 XML/Ada includes support for parsing XML files, including DTDs, 
