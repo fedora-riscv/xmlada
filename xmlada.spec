@@ -107,6 +107,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2013-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Sat Jul 13 2013 Pavel ZHukov <landgraf@fedoraproject.org> - 2013-2
 - New release
 - AdaCore has moved to years in version.
