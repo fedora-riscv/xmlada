@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -107,6 +107,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Sat Jul 13 2013 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-4
+- Rebuild for new gcc 
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2013-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
