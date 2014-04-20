@@ -107,7 +107,7 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
-* Sat Jul 13 2013 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-4
+* Sun Apr 20 2014 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-4
 - Rebuild for new gcc 
 
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2013-3
