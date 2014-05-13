@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -19,7 +19,7 @@ BuildRequires:  chrpath
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
 # xmlada and gcc-gnat only available on these:
-ExclusiveArch: %{ix86} x86_64 ia64 ppc ppc64 alpha
+ExclusiveArch: %{ix86} x86_64 ia64 ppc ppc64 alpha aarch64
 
 
 %description
@@ -107,6 +107,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Tue May 13 2014 Peter Robinson <pbrobinson@fedoraproject.org> 2013-5
+- aarch64 now has Ada
+
 * Sun Apr 20 2014 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-4
 - Rebuild for new gcc 
 
