@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -107,6 +107,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2013-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Tue May 13 2014 Peter Robinson <pbrobinson@fedoraproject.org> 2013-6
 - Use GNAT_arches rather than an explicit list
 
