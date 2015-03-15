@@ -246,3 +246,16 @@
  	${INSTALL} xmlada-config  ${DESTDIR}/${bindir}
  	-$(CP) -r docs/_build/html/* ${DESTDIR}/$(datadir)/doc/xmlada/ 2>/dev/null
  	-$(CP) -r docs/_build/latex/XMLAda.pdf ${DESTDIR}/$(datadir)/doc/xmlada/ 2>/dev/null
+diff --git a/Makefile.in b/Makefile.in
+index 97a9b46..85cc3fc 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -106,7 +106,7 @@ else
+ 	cd  $(DESTDIR)/${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}
+ 	-cd  $(DESTDIR)/${xmllib}; ${LN_S} libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
+ 	cd  $(DESTDIR)/${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${VERSION}
+-	-cd  $(DESTDIR)/${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}.${basename ${VERSION}}
++	-cd  $(DESTDIR)/${libdir}; ${LN_S} xmlada/${LIBRARY_TYPE}/libxmlada_$*${LIBEXT}.${VERSION} libxmlada_$*${LIBEXT}
+ endif
+ endif
+ 	cd $(DESTDIR)/${xmllib}; ${CHMOD} ugo-w *.ali

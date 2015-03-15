@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -103,10 +103,14 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 %{_includedir}/%{name}/*.ads
 %{_libdir}/%{name}/relocatable/*.ali
 %{_libdir}/%{name}/relocatable/lib%{name}*.so
+%{_libdir}/lib%{name}*.so
 
 
 
 %changelog
+* Sun Mar 15 2015 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-10
+- Create unversioned symlinks
+ 
 * Sat Feb 14 2015 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-9
 - Rebuild with new gcc 4.9
 
