@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -107,6 +107,9 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 
 %changelog
+* Wed Apr 29 2015 Peter Robinson <pbrobinson@fedoraproject.org> 2013-10
+- rebuild (gcc / gnat 5)
+
 * Sat Feb 14 2015 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-9
 - Rebuild with new gcc 4.9
 
