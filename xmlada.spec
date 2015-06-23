@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2015
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -38,7 +38,7 @@ Xml library for ada devel package.
 %patch1 -p1 
 
 %build
-%configure --disable-rpath --enable-shared --disable-static
+%configure --disable-rpath --enable-shared --disable-static --enable-build=distrib
 make LIBRARY_TYPE=relocatable GPROPTS="%{GNAT_optflags}" prefix=%{buildroot}/%{_prefix}
 
 
@@ -46,6 +46,8 @@ make LIBRARY_TYPE=relocatable GPROPTS="%{GNAT_optflags}" prefix=%{buildroot}/%{_
 rm -rf %{buildroot}
 export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
 make install LIBRARY_TYPE=relocatable  prefix=%{buildroot}/%{_prefix} GPROPTS="${GPRINSTALL_OPTS}" PSUB="share/gpr"
+## Installing main gpr file
+cp distrib/%{name}.gpr %{buildroot}/%{_GNAT_project_dir}
 ## Revoke exec permissions
 find %{buildroot} -name '*.gpr' -exec chmod -x {} \;
 find %{buildroot}%{_docdir} -type f -exec chmod -x {} \;
@@ -89,6 +91,9 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
 
 %changelog
+* Tue Jun 23 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-2
+- Install xmlada.gpr
+
 * Wed Jun 17 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-1
 - New release (#2015)
 
