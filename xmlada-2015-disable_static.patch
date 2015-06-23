@@ -1,0 +1,58 @@
+diff --git a/Makefile.in b/Makefile.in
+index 3ebb2d4..1cc50fd 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1,7 +1,7 @@
+ ## The type of library we want to build. Possible values:
+ ##   relocatable
+ ##   static
+-LIBRARY_TYPE=static
++LIBRARY_TYPE=relocatable
+ 
+ # Replace with the location for the installation directory
+ PACKAGE_TARNAME=@PACKAGE_TARNAME@
+@@ -42,16 +42,8 @@ GPROPTS+=--target=${TARGET}
+ IPREFIX=${prefix}/${TARGET}
+ endif
+ 
+-ifeq (${BUILDS_SHARED},yes)
+-all: static relocatable
+-install: install-clean install-static install-relocatable
+-else
+-all: static
+-install: install-clean install-static
+-endif
+-
+-static:
+-	${GPRBUILD} -m -p -XLIBRARY_TYPE=static ${GPROPTS} xmlada.gpr
++all: relocatable
++install: install-clean install-relocatable
+ 
+ shared relocatable:
+ 	${GPRBUILD} -m -p -XLIBRARY_TYPE=relocatable ${GPROPTS} xmlada.gpr
+@@ -92,16 +84,6 @@ ifneq (,$(wildcard $(IPREFIX)/$(PSUB)/manifests/xmlada_schema))
+ 		--project-subdir=$(PSUB) xmlada_unicode
+ endif
+ 
+-## Do the installation for an explicit target
+-install-static:
+-	${GPRINSTALL} -f -p -XLIBRARY_TYPE=static ${GPROPTS} \
+-		--prefix=${IPREFIX} --project-subdir=$(PSUB) \
+-		--build-var=XMLADA_BUILD --build-name=static xmlada.gpr
+-	${CP} distrib/xmlada.gpr ${IPREFIX}/$(PSUB)
+-ifneq (${OS},Windows_NT)
+-	${CHMOD} +x ${IPREFIX}/bin/xmlada-config
+-	cd ${IPREFIX}/lib; ${CHMOD} a-w xmlada_*/*.ali
+-endif
+ 
+ install-shared install-relocatable:
+ 	${GPRINSTALL} -f -p -XLIBRARY_TYPE=relocatable ${GPROPTS} \
+@@ -112,7 +94,7 @@ clean_%: force
+ 	gprclean -XLIBRARY_TYPE=$* -q xmlada.gpr
+ 	gprclean -XLIBRARY_TYPE=$* -q -XTESTS_ACTIVATED=Yes xmlada.gpr
+ 
+-clean: clean_relocatable clean_static
++clean: clean_relocatable 
+ 	cd docs; ${MAKE} -e clean
+ 
+ distclean: clean
