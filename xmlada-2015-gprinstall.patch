@@ -1,0 +1,63 @@
+diff --git a/unicode/xmlada_unicode.gpr b/unicode/xmlada_unicode.gpr
+index 8a5a2ac..290cfe6 100644
+--- a/unicode/xmlada_unicode.gpr
++++ b/unicode/xmlada_unicode.gpr
+@@ -37,4 +37,8 @@ project XmlAda_Unicode is
+    package Binder   renames Shared.Binder;
+    package Ide      renames Shared.Ide;
+ 
++   package Install is
++       for Sources_Subdir use "./include/xmlada/" & Project'Library_Name;
++   end Install;
++
+ end XmlAda_Unicode;
+diff --git a/dom/xmlada_dom.gpr b/dom/xmlada_dom.gpr
+index 5c156ab..f6d37f6 100644
+--- a/dom/xmlada_dom.gpr
++++ b/dom/xmlada_dom.gpr
+@@ -39,4 +39,7 @@ project XmlAda_Dom is
+    package Binder   renames Shared.Binder;
+    package Ide      renames Shared.Ide;
+ 
++   package Install is
++       for Sources_Subdir use "./include/xmlada/" & Project'Library_Name;
++   end Install;
+ end XmlAda_Dom;
+diff --git a/input_sources/xmlada_input.gpr b/input_sources/xmlada_input.gpr
+index 7602590..329bdad 100644
+--- a/input_sources/xmlada_input.gpr
++++ b/input_sources/xmlada_input.gpr
+@@ -39,6 +39,7 @@ project XmlAda_Input is
+    package Ide      renames Shared.Ide;
+ 
+    package Install is
++      for Sources_Subdir use "./include/xmlada/" & Project'Library_Name;
+       for Artifacts ("share/doc/xmlada")
+         use ("../docs/_build/html/*", "../docs/_build/latex/XMLAda.pdf");
+       for Artifacts ("share/gps/plug-ins/") use ("../distrib/xmlada_gps.py");
+diff --git a/sax/xmlada_sax.gpr b/sax/xmlada_sax.gpr
+index f4d74ac..c146d79 100644
+--- a/sax/xmlada_sax.gpr
++++ b/sax/xmlada_sax.gpr
+@@ -39,4 +39,8 @@ project XmlAda_Sax is
+    package Binder   renames Shared.Binder;
+    package Ide      renames Shared.Ide;
+ 
++   package Install is
++       for Sources_Subdir use "./include/xmlada/" & Project'Library_Name;
++   end Install;
++
+ end XmlAda_Sax;
+diff --git a/schema/xmlada_schema.gpr b/schema/xmlada_schema.gpr
+index 4688847..62dee2f 100644
+--- a/schema/xmlada_schema.gpr
++++ b/schema/xmlada_schema.gpr
+@@ -40,4 +40,8 @@ project XmlAda_Schema is
+    package Binder   renames Shared.Binder;
+    package Ide      renames Shared.Ide;
+ 
++   package Install is
++       for Sources_Subdir use "./include/xmlada/" & Project'Library_Name;
++   end Install;
++
+ end XmlAda_Schema;

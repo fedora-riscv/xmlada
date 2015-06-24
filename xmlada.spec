@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2015
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -10,7 +10,8 @@ URL:            http://libre.adacore.com
 Source0:        xmlada-gpl-%{version}-src.tar.gz 
 ## Fedora-specific
 Patch1:         %{name}-%{version}-disable_static.patch
-BuildRequires:  chrpath gprbuild
+Patch2:         %{name}-%{version}-gprinstall.patch
+BuildRequires:  chrpath  gprbuild
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
 # xmlada and gcc-gnat only available on these:
@@ -36,15 +37,17 @@ Xml library for ada devel package.
 %prep
 %setup -q -n xmlada-gpl-%{version}-src
 %patch1 -p1 
+%patch2 -p1 
 
 %build
 %configure --disable-rpath --enable-shared --disable-static --enable-build=distrib
-make LIBRARY_TYPE=relocatable GPROPTS="%{GNAT_optflags}" prefix=%{buildroot}/%{_prefix}
+make LIBRARY_TYPE=relocatable GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
 
 
 %install
 rm -rf %{buildroot}
-export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
+###export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
+export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --prefix=%{buildroot}"
 make install LIBRARY_TYPE=relocatable  prefix=%{buildroot}/%{_prefix} GPROPTS="${GPRINSTALL_OPTS}" PSUB="share/gpr"
 ## Installing main gpr file
 cp distrib/%{name}.gpr %{buildroot}/%{_GNAT_project_dir}
@@ -62,6 +65,8 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 ## only-non-binary-in-usr-lib
 cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
+### TEMPORARY for upgrade procedure
+cd %{buildroot}/%{_libdir} && for so in `ls lib%{name}.so`; do ln -s $so $so.2013; done
 
 %files 
 %defattr(-,root,root,-)
@@ -79,10 +84,8 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
 %files devel
 %defattr(-,root,root,-)
-%dir %{_includedir}/%{name}
+%{_includedir}/%{name}
 %{_GNAT_project_dir}/%{name}*.gpr
-%{_includedir}/%{name}/*.adb
-%{_includedir}/%{name}/*.ads
 %{_libdir}/%{name}/*.ali
 %{_libdir}/%{name}/lib%{name}*.so
 %{_libdir}/lib%{name}*.so
@@ -91,6 +94,10 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
 
 %changelog
+* Wed Jun 24 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-3
+- Move sources to separate directories
+- Add temporary symlinks to allow gprbuiild bootstraping
+
 * Tue Jun 23 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-2
 - Install xmlada.gpr
 
