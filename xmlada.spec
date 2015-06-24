@@ -16,8 +16,6 @@ BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
 # xmlada and gcc-gnat only available on these:
 ExclusiveArch:  %{GNAT_arches}
-### UPGRADE HACK! REMOVE ME
-Provides:      libxmlada_dom.so.2013 libxmlada_input_sources.so.2013 libxmlada_schema.so.2013 libxmlada_sax.so.2013
 
 
 %description
@@ -67,8 +65,6 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 ## only-non-binary-in-usr-lib
 cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
-### TEMPORARY for upgrade procedure
-cd %{buildroot}/%{_libdir} && for so in `ls lib%{name}*.so`; do ln -s $so $so.2013; done
 
 %files 
 %defattr(-,root,root,-)
@@ -96,6 +92,9 @@ cd %{buildroot}/%{_libdir} && for so in `ls lib%{name}*.so`; do ln -s $so $so.20
 
 
 %changelog
+* Wed Jun 24 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-7
+- Remove temporary links
+
 * Wed Jun 24 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-6
 - Move sources to separate directories
 - Add temporary symlinks to allow gprbuiild bootstraping
