@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2015
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -66,7 +66,7 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 ## only-non-binary-in-usr-lib
 cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 ### TEMPORARY for upgrade procedure
-cd %{buildroot}/%{_libdir} && for so in `ls lib%{name}.so`; do ln -s $so $so.2013; done
+cd %{buildroot}/%{_libdir} && for so in `ls lib%{name}*.so`; do ln -s $so $so.2013; done
 
 %files 
 %defattr(-,root,root,-)
@@ -94,9 +94,10 @@ cd %{buildroot}/%{_libdir} && for so in `ls lib%{name}.so`; do ln -s $so $so.201
 
 
 %changelog
-* Wed Jun 24 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-3
+* Wed Jun 24 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-4
 - Move sources to separate directories
 - Add temporary symlinks to allow gprbuiild bootstraping
+- Fix temporary (upgrade) links pattern
 
 * Tue Jun 23 2015 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2015-2
 - Install xmlada.gpr
