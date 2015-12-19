@@ -79,6 +79,8 @@ install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
 ## To enable GPS plugin delete this string and create subpackage
 rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
+## These Sphinx-generated files aren't needed in the package:
+rm %{buildroot}%{_pkgdocdir}/{.buildinfo,objects.inv}
 ## only-non-binary-in-usr-lib
 cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
@@ -110,6 +112,11 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 %{_libdir}/%{name}/lib%{name}*.so
 %{_libdir}/lib%{name}*.so
 %{_GNAT_project_dir}/manifests
+%{_pkgdocdir}/*.html
+%{_pkgdocdir}/searchindex.js
+%{_pkgdocdir}/_sources
+%{_pkgdocdir}/_static
+%{_pkgdocdir}/XMLAda.pdf
 
 
 %files static
