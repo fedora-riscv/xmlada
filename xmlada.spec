@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2015
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -14,7 +14,7 @@ BuildRequires:  gprbuild
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
 # xmlada and gcc-gnat only available on these:
-ExclusiveArch:  %{GNAT_arches}
+ExclusiveArch:  %{ix86} x86_64
 
 
 %description
@@ -124,6 +124,9 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
 
 %changelog
+* Sun Jan 31 2016 Björn Persson <Bjorn@Rombobjörn.se> - 2015-9
+- Rebuilt on x86 and x86-64.
+
 * Sat Dec 19 2015 Björn Persson <Bjorn@Rombobjörn.se> - 2015-8
 - Added a -static subpackage for linking GPRbuild statically.
 
