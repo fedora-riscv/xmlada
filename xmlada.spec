@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2015
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -124,6 +124,9 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
 
 %changelog
+* Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2015-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Sun Jan 31 2016 Björn Persson <Bjorn@Rombobjörn.se> - 2015-10
 - Rebuilt with GCC 6 prerelease.
 
