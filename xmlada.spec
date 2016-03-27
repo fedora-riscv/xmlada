@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2013
-Release:        11%{?dist}
+Release:        11.1%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv2+
@@ -38,6 +38,21 @@ Requires:       fedora-gnat-project-common >= 2
 %description devel
 Xml library for ada devel package.
 
+
+%package static
+Summary:        XML library for Ada, static libraries
+Group:          Development/Libraries
+Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description static
+This package contains the XML/Ada libraries for static linking. It is needed
+for linking GPRbuild statically so that GPRbuild will remain functional when
+libraries are upgraded.
+
+Other Fedora packages shall require xmlada-devel rather than xmlada-static if
+possible.
+
+
 %prep
 %setup -q -n xmlada-gpl-%{version}-src
 %patch0 -p1
@@ -45,7 +60,7 @@ Xml library for ada devel package.
 %patch2 -p1 
 
 %build
-%configure --disable-rpath --enable-shared --disable-static
+%configure --disable-rpath --enable-shared --enable-static
 make %{?_smp_mflags}  GNATFLAGS="%{GNAT_optflags}" ADA_PROJECT_PATH=%_GNAT_project_dir BUILDS_SHARED=yes 
 
 
@@ -64,7 +79,6 @@ install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
 ## There is not GNAT programming studio in Fedora
 ## To enable GPS plugin delete this string and create subpackage
 rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
-rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 ## only-non-binary-in-usr-lib
 
 %files 
@@ -73,7 +87,6 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 %dir %{_libdir}/%{name}
 %{_docdir}/%{name}
 %dir %{_libdir}/%{name}/relocatable
-%dir %{_libdir}/%{name}/static
 %{_libdir}/lib%{name}_dom.so.*
 %{_libdir}/lib%{name}_input_sources.so.*
 %{_libdir}/lib%{name}_schema.so.*
@@ -106,8 +119,14 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 %{_libdir}/lib%{name}*.so
 
 
+%files static
+%{_libdir}/%{name}/static
+
 
 %changelog
+* Sun Mar 27 2016 Björn Persson <Bjorn@Rombobjörn.se> - 2013-11.1
+- Added a -static subpackage for linking GPRbuild statically.
+
 * Wed Apr 29 2015 Peter Robinson <pbrobinson@fedoraproject.org> 2013-11
 - rebuild (gcc / gnat 5)
 
