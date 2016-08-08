@@ -34,7 +34,7 @@ index 7602590..329bdad 100644
 +      for Sources_Subdir use "./include/xmlada/" & Project'Library_Name;
        for Artifacts ("share/doc/xmlada")
          use ("../docs/_build/html/*", "../docs/_build/latex/XMLAda.pdf");
-       for Artifacts ("share/gps/plug-ins/") use ("../distrib/xmlada_gps.py");
+       for Artifacts ("lib/gnat") use ("../distrib/xmlada.gpr");
 diff --git a/sax/xmlada_sax.gpr b/sax/xmlada_sax.gpr
 index f4d74ac..c146d79 100644
 --- a/sax/xmlada_sax.gpr

@@ -1,9 +1,9 @@
 Name:           xmlada
-Version:        2015
-Release:        12%{?dist}
+Version:        2016
+Release:        1%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
-License:        GPLv2+
+License:        GPLv3+
 URL:            http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
@@ -26,7 +26,6 @@ It includes support for validating XML files with XML schemas.
 %package devel 
 Summary:        XML library for Ada devel package
 Group:          Development/Libraries
-License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       fedora-gnat-project-common >= 2
 
@@ -54,7 +53,7 @@ possible.
 
 %build
 %configure --disable-rpath --enable-shared --enable-static --enable-build=distrib
-make GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
+make shared static GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
 
 
 %install
@@ -64,10 +63,7 @@ export GPRINSTALL_OPTS="--lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-
 ## Install the shared libraries first and then the static ones, because
 ## apparently the variant that gprinstall sees first becomes the default in the
 ## project files.
-OS=Windows_NT make install-relocatable install-static prefix=%{buildroot}/%{_prefix} GPROPTS="${GPRINSTALL_OPTS}" PSUB="share/gpr"
-# Setting OS to "Windows_NT" circumvents a hardcoded "lib" in the makefile.
-# This also skips the removal of write permission from the ALI files, so the
-# files section compensates for that.
+make install-relocatable install-static prefix=%{buildroot}/%{_prefix} GPROPTS="${GPRINSTALL_OPTS}" PSUB="share/gpr"
 
 ## Revoke exec permissions
 find %{buildroot} -name '*.gpr' -exec chmod -x {} \;
@@ -84,6 +80,17 @@ rm %{buildroot}%{_pkgdocdir}/{.buildinfo,objects.inv}
 ## only-non-binary-in-usr-lib
 cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
+## Move a misplaced project file into place.
+mv %{buildroot}%{_prefix}/lib/gnat/* %{buildroot}%{_GNAT_project_dir}/
+
+## GPRinstall's manifest files are architecture-specific because they contain
+## what seems to be checksums of architecture-specific files, so they must not
+## be under _datadir. Their function is apparently undocumented, but my crystal
+## ball tells me that they're used when GPRinstall uninstalls or upgrades
+## packages. The manifest file is therefore irrelevant in this RPM package, so
+## delete it.
+rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
+
 
 %check
 ## Verify that there are no runpaths in the compiled libraries.
@@ -93,7 +100,7 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 %files 
 %defattr(-,root,root,-)
 %license COPYING*
-%doc README TODO AUTHORS
+%doc README.md TODO AUTHORS
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/static
 %{_libdir}/lib%{name}_dom.so.*
@@ -112,7 +119,6 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 %attr(444,-,-) %{_libdir}/%{name}/*.ali
 %{_libdir}/%{name}/lib%{name}*.so
 %{_libdir}/lib%{name}*.so
-%{_GNAT_project_dir}/manifests
 %{_pkgdocdir}/*.html
 %{_pkgdocdir}/searchindex.js
 %{_pkgdocdir}/_sources
@@ -125,6 +131,11 @@ cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
 
 %changelog
+* Mon Aug 08 2016 Björn Persson <Bjorn@Rombobjörn.se> - 2016-1
+- Upgraded to the 2016 release.
+- Removed the irrelevant and FHS-violating manifest file.
+- The license has changed to GPLv3+.
+
 * Sun May 01 2016 Björn Persson <Bjorn@Rombobjörn.se> - 2015-12
 - Tagged the license file as such.
 
