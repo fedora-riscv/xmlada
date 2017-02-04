@@ -131,6 +131,9 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 
 
 %changelog
+* Sat Feb  4 2017 Pavel Zhukov <pavel@zhukoff.net> - 2016-1
+- Rebuild with new gnat
+
 * Mon Aug 08 2016 Björn Persson <Bjorn@Rombobjörn.se> - 2016-1
 - Upgraded to the 2016 release.
 - Removed the irrelevant and FHS-violating manifest file.
