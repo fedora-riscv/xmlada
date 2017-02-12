@@ -1,0 +1,12 @@
+--- compilers.xml	2016-11-03 02:12:40.000000000 -0600
++++ compilers.xml	2017-02-11 17:30:04.705825349 -0700
+@@ -746,8 +746,7 @@
+     </version>
+     <languages>Ada</languages>
+     <variable name="gcc_version">
+-      <external>${PREFIX}gcc -v</external>
+-      <grep regexp="^[-\w]*gcc \S+ (\S+)" group="1"></grep>
++      <external>${PREFIX}gcc -dumpversion</external>
+     </variable>
+     <runtimes default="default,kernel,native">
+        <directory group="default" >\.\./lib/gcc(-lib)?/$TARGET/$gcc_version/adalib/</directory>

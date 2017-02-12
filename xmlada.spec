@@ -8,6 +8,7 @@ URL:            http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
 Source0:        xmlada-gpl-%{version}-src.tar.gz 
+Source1:        gprbuild-2016-gcc7.patch
 ## Fedora-specific
 Patch2:         %{name}-%{version}-gprinstall.patch
 BuildRequires:  gprbuild
@@ -52,11 +53,20 @@ possible.
 %patch2 -p1 
 
 %build
+mkdir -p hack/bin
+cp -a /usr/share/gprconfig hack
+patch hack/gprconfig/compilers.xml %{SOURCE1}
+( echo "#!/bin/sh" ; echo "/usr/bin/gprconfig --db $PWD/hack/gprconfig --db- \"\$@\"" ) >hack/bin/gprconfig
+chmod a+x hack/bin/gprconfig
+PATH=$PWD/hack/bin:$PATH
+
 %configure --disable-rpath --enable-shared --enable-static --enable-build=distrib
 make shared static GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
 
 
 %install
+PATH=$PWD/hack/bin:$PATH
+
 rm -rf %{buildroot}
 ###export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
 export GPRINSTALL_OPTS="--lib-subdir=%{buildroot}/%{_libdir} --link-lib-subdir=%{buildroot}/%{_libdir}"
@@ -129,8 +139,8 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 
 
 %changelog
-* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2016-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+* Sun Feb 12 2017 Björn Persson <Bjorn@Rombobjörn.se> - 2016-3
+- Made a temporary workaround to rebuild with GCC 7 prerelease.
 
 * Sat Feb  4 2017 Pavel Zhukov <pavel@zhukoff.net> - 2016-1
 - Rebuild with new gnat
