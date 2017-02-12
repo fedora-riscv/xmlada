@@ -59,7 +59,7 @@ make shared static GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
 %install
 rm -rf %{buildroot}
 ###export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
-export GPRINSTALL_OPTS="--lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir}"
+export GPRINSTALL_OPTS="--lib-subdir=%{buildroot}/%{_libdir} --link-lib-subdir=%{buildroot}/%{_libdir}"
 ## Install the shared libraries first and then the static ones, because
 ## apparently the variant that gprinstall sees first becomes the default in the
 ## project files.
@@ -77,8 +77,6 @@ rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 ## These Sphinx-generated files aren't needed in the package:
 rm %{buildroot}%{_pkgdocdir}/{.buildinfo,objects.inv}
-## only-non-binary-in-usr-lib
-cd %{buildroot}/%{_libdir} && ln -s %{name}/lib%{name}*.so.* .
 
 ## Move a misplaced project file into place.
 mv %{buildroot}%{_prefix}/lib/gnat/* %{buildroot}%{_GNAT_project_dir}/
