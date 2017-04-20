@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2016
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv3+
@@ -129,6 +129,9 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 
 
 %changelog
+* Wed Apr 20 2017 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2016-5
+- Rebuild to fix non x86 arches ali versions
+
 * Fri Feb 17 2017 Björn Persson <Bjorn@Rombobjörn.se> - 2016-4
 - Reverted the temporary workaround.
 
