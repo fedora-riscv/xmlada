@@ -1,6 +1,6 @@
 Name:           xmlada
-Version:        2016
-Release:        5%{?dist}
+Version:        2017
+Release:        1%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv3+
@@ -9,7 +9,7 @@ URL:            http://libre.adacore.com
 ## http://libre.adacore.com/libre/download/
 Source0:        xmlada-gpl-%{version}-src.tar.gz 
 ## Fedora-specific
-Patch2:         %{name}-%{version}-gprinstall.patch
+Patch2:         %{name}-2016-gprinstall.patch
 BuildRequires:  gprbuild
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2 
@@ -129,6 +129,9 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 
 
 %changelog
+* Fri Jul  7 2017 Pavel Zhukov <pzhukov@redhat.com> - 2017-1
+- New version (2017)
+
 * Wed Apr 20 2017 Pavel Zhukov <<landgraf@fedoraproject.org>> - 2016-5
 - Rebuild to fix non x86 arches ali versions
 
