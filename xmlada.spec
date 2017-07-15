@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2017
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv3+
@@ -129,6 +129,9 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 
 
 %changelog
+* Sat Jul 15 2017 Pavel Zhukov <pzhukov@redhat.com> - 2017-2
+- rebuild with new gprbuild
+
 * Fri Jul  7 2017 Pavel Zhukov <pzhukov@redhat.com> - 2017-1
 - New version (2017)
 
