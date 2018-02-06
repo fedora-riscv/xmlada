@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2017
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv3+
@@ -129,6 +129,9 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 
 
 %changelog
+* Tue Feb  6 2018 Pavel Zhukov <pzhukov@redhat.com> - 2017-5
+- Rebuild with new gnat
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2017-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
