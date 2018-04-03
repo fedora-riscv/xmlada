@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2017
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv3+
@@ -10,11 +10,17 @@ URL:            http://libre.adacore.com
 Source0:        xmlada-gpl-%{version}-src.tar.gz 
 ## Fedora-specific
 Patch2:         %{name}-2016-gprinstall.patch
+
+# Build on architectures where gprbuild is available
+# on architectures without gprbuild provide source package only
+# which is unpacked tarball for the purpose of bootstrapping of gprbuild
+# bootstrap on ! %{GPRbuild_arches}
+%ifarch %{GPRbuild_arches}
 BuildRequires:  gprbuild
 BuildRequires:  gcc-gnat
+%endif
+
 BuildRequires:  fedora-gnat-project-common >= 2 
-# Build only on architectures where GNAT and GPRbuild are available:
-ExclusiveArch:  %{GPRbuild_arches}
 
 
 %description
@@ -23,7 +29,8 @@ full support for SAX,
 and an almost complete support for the core part of the DOM.
 It includes support for validating XML files with XML schemas.
 
-%package devel 
+%ifarch %{GPRbuild_arches}
+%package devel
 Summary:        XML library for Ada devel package
 Group:          Development/Libraries
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -46,17 +53,33 @@ libraries are upgraded.
 Other Fedora packages shall require xmlada-devel rather than xmlada-static if
 possible.
 
+%else
+
+%global debug_package %{nil}
+
+%package sources
+Summary:        Source of XMLada for bootstrapping
+Group:          Development/Libraries
+
+%description sources
+On architectures without gprbuild installs sources for gprbuild's bootstrap
+
+%endif
 
 %prep
 %setup -q -n xmlada-gpl-%{version}-src
-%patch2 -p1 
+%patch2 -p1
 
 %build
-%configure --disable-rpath --enable-shared --enable-static --enable-build=distrib
+%ifarch %{GPRbuild_arches}
+%configure --disable-rpath --enable-shared --disable-static --enable-build=distrib
 make shared static GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
-
+%else
+%configure --enable-static --enable-build=distrib
+%endif
 
 %install
+%ifarch %{GPRbuild_arches}
 ###export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
 export GPRINSTALL_OPTS="--lib-subdir=%{buildroot}/%{_libdir} --link-lib-subdir=%{buildroot}/%{_libdir}"
 ## Install the shared libraries first and then the static ones, because
@@ -87,6 +110,12 @@ mv %{buildroot}%{_prefix}/lib/gnat/* %{buildroot}%{_GNAT_project_dir}/
 ## packages. The manifest file is therefore irrelevant in this RPM package, so
 ## delete it.
 rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
+%else
+mkdir -p %{buildroot}/%{_includedir}/%{name}/sources
+cp -r . %{buildroot}/%{_includedir}/%{name}/sources
+find %{buildroot}/%{_includedir}/%{name}/sources -type f ! -name "*ad[sb]" ! -name "*gpr" -delete
+find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
+%endif
 
 
 %check
@@ -94,10 +123,11 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 %{_rpmconfigdir}/check-rpaths
 
 
-%files 
+%files
 %defattr(-,root,root,-)
 %license COPYING*
 %doc README.md TODO AUTHORS
+%ifarch %{GPRbuild_arches}
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/static
 %{_libdir}/lib%{name}_dom.so.*
@@ -106,9 +136,11 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 %{_libdir}/lib%{name}_unicode.so.*
 %{_libdir}/lib%{name}_sax.so.*
 %{_libdir}/%{name}/lib%{name}*.so.*
+%endif
 
 
 
+%ifarch %{GPRbuild_arches}
 %files devel
 %defattr(-,root,root,-)
 %{_includedir}/%{name}
@@ -126,8 +158,15 @@ rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 %files static
 %{_libdir}/%{name}/*.a
 
+%else
+%files sources
+%{_includedir}/%{name}
+%endif
 
 %changelog
+* Tue Apr  3 2018 Pavel Zhukov <pzhukov@redhat.com> - 2017-6
+- Build source packages on non gprbuild enabled arches for bootstraping
+
 * Tue Feb  6 2018 Pavel Zhukov <pzhukov@redhat.com> - 2017-5
 - Rebuild with new gnat
 
