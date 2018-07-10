@@ -124,7 +124,6 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 
 
 %files
-%defattr(-,root,root,-)
 %license COPYING*
 %doc README.md TODO AUTHORS
 %ifarch %{GPRbuild_arches}
@@ -142,7 +141,6 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 
 %ifarch %{GPRbuild_arches}
 %files devel
-%defattr(-,root,root,-)
 %{_includedir}/%{name}
 %{_GNAT_project_dir}/%{name}*.gpr
 %attr(444,-,-) %{_libdir}/%{name}/*.ali
