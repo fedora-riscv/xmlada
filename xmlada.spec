@@ -1,6 +1,6 @@
 Name:           xmlada
 Version:        2017
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        XML library for Ada
 Group:          System Environment/Libraries
 License:        GPLv3+
@@ -162,6 +162,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2017-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Tue Apr  3 2018 Pavel Zhukov <pzhukov@redhat.com> - 2017-6
 - Build source packages on non gprbuild enabled arches for bootstraping
 
