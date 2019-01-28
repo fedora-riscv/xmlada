@@ -2,7 +2,6 @@ Name:           xmlada
 Version:        2017
 Release:        7%{?dist}
 Summary:        XML library for Ada
-Group:          System Environment/Libraries
 License:        GPLv3+
 URL:            http://libre.adacore.com
 ## Direct download link is unavailable
@@ -32,7 +31,6 @@ It includes support for validating XML files with XML schemas.
 %ifarch %{GPRbuild_arches}
 %package devel
 Summary:        XML library for Ada devel package
-Group:          Development/Libraries
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       fedora-gnat-project-common >= 2
 
@@ -42,7 +40,6 @@ Xml library for ada devel package.
 
 %package static
 Summary:        XML library for Ada, static libraries
-Group:          Development/Libraries
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
 
 %description static
@@ -59,7 +56,6 @@ possible.
 
 %package sources
 Summary:        Source of XMLada for bootstrapping
-Group:          Development/Libraries
 
 %description sources
 On architectures without gprbuild installs sources for gprbuild's bootstrap
