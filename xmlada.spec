@@ -1,25 +1,29 @@
+%global bootstrap_arch  %{GPRbuild_arches}
+## Set this variable to %{GPRbuild_arches} for bootraping of
+## gprbuild on new architecture or in case of new magor verion of
+## gcc-gnat package
+
 Name:           xmlada
-Version:        2017
-Release:        8%{?dist}
+Version:        2018
+Release:        2%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
-Source0:        xmlada-gpl-%{version}-src.tar.gz 
+Source0:        xmlada-gpl-2018-20180524-src.tar.gz
 ## Fedora-specific
 Patch2:         %{name}-2016-gprinstall.patch
 
-# Build on architectures where gprbuild is available
-# on architectures without gprbuild provide source package only
-# which is unpacked tarball for the purpose of bootstrapping of gprbuild
-# bootstrap on ! %{GPRbuild_arches}
-%ifarch %{GPRbuild_arches}
+
+
+%ifnarch %{bootstrap_arch}
 BuildRequires:  gprbuild
 BuildRequires:  gcc-gnat
+BuildRequires:  fedora-gnat-project-common >= 2
 %endif
 
-BuildRequires:  fedora-gnat-project-common >= 2 
+ExclusiveArch:  %{GPRbuild_arches}
 
 
 %description
@@ -28,7 +32,7 @@ full support for SAX,
 and an almost complete support for the core part of the DOM.
 It includes support for validating XML files with XML schemas.
 
-%ifarch %{GPRbuild_arches}
+%ifnarch %{bootstrap_arch}
 %package devel
 Summary:        XML library for Ada devel package
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -64,10 +68,9 @@ On architectures without gprbuild installs sources for gprbuild's bootstrap
 
 %prep
 %setup -q -n xmlada-gpl-%{version}-src
-%patch2 -p1
 
 %build
-%ifarch %{GPRbuild_arches}
+%ifnarch %{bootstrap_arch}
 %configure --disable-rpath --enable-shared --disable-static --enable-build=distrib
 make shared static GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
 %else
@@ -75,7 +78,7 @@ make shared static GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
 %endif
 
 %install
-%ifarch %{GPRbuild_arches}
+%ifnarch %{bootstrap_arch}
 ###export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
 export GPRINSTALL_OPTS="--lib-subdir=%{buildroot}/%{_libdir} --link-lib-subdir=%{buildroot}/%{_libdir}"
 ## Install the shared libraries first and then the static ones, because
@@ -96,9 +99,8 @@ rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 ## These Sphinx-generated files aren't needed in the package:
 rm %{buildroot}%{_pkgdocdir}/{.buildinfo,objects.inv}
 
-## Move a misplaced project file into place.
-mv %{buildroot}%{_prefix}/lib/gnat/* %{buildroot}%{_GNAT_project_dir}/
-
+mkdir -p %{buildroot}/%{_datarootdir}/%{name}
+mv %{buildroot}/%{_datarootdir}/examples %{buildroot}/%{_datarootdir}/%{name}
 ## GPRinstall's manifest files are architecture-specific because they contain
 ## what seems to be checksums of architecture-specific files, so they must not
 ## be under _datadir. Their function is apparently undocumented, but my crystal
@@ -122,7 +124,7 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %files
 %license COPYING*
 %doc README.md TODO AUTHORS
-%ifarch %{GPRbuild_arches}
+%ifnarch %{bootstrap_arch}
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/static
 %{_libdir}/lib%{name}_dom.so.*
@@ -135,7 +137,7 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 
 
 
-%ifarch %{GPRbuild_arches}
+%ifnarch %{bootstrap_arch}
 %files devel
 %{_includedir}/%{name}
 %{_GNAT_project_dir}/%{name}*.gpr
@@ -147,6 +149,7 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %{_pkgdocdir}/_sources
 %{_pkgdocdir}/_static
 %{_pkgdocdir}/XMLAda.pdf
+%{_datarootdir}/%{name}
 
 
 %files static
@@ -158,6 +161,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Tue Feb  5 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-2
+- Produce source only package in bootstrap mode
+
 * Sun Feb 03 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2017-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
