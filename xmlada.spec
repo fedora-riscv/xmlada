@@ -6,7 +6,7 @@
 
 Name:           xmlada
 Version:        2018
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -162,7 +162,7 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
-* Tue Feb  5 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-3
+* Tue Feb  5 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-4
 - Rebuild with new gprbuild
 
 * Tue Feb  5 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-2
