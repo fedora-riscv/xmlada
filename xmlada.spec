@@ -1,5 +1,5 @@
 ## %global bootstrap_arch  %{GPRbuild_arches}
-%global bootstrap_arch  NONEARCH
+%global bootstrap_arch  %{GPRbuild_arches}
 ## Set this variable to %{GPRbuild_arches} for bootraping of
 ## gprbuild on new architecture or in case of new magor verion of
 ## gcc-gnat package
