@@ -1,12 +1,12 @@
 ## %global bootstrap_arch  %{GPRbuild_arches}
-%global bootstrap_arch  %{GPRbuild_arches}
+%global bootstrap_arch  NONE
 ## Set this variable to %{GPRbuild_arches} for bootraping of
 ## gprbuild on new architecture or in case of new magor verion of
 ## gcc-gnat package
 
 Name:           xmlada
 Version:        2018
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -162,8 +162,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
-* Sat Feb  9 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-5
-Rebuld with new gnat-rpm-macros
+* Sat Feb  9 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-6
+- Rebuld with new gnat-rpm-macros
+- Build with gprbuild 2018
 
 * Tue Feb  5 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-4
 - Rebuild with new gprbuild
