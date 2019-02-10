@@ -6,7 +6,7 @@
 
 Name:           xmlada
 Version:        2018
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -19,7 +19,7 @@ Patch2:         %{name}-2016-gprinstall.patch
 
 
 %ifnarch %{bootstrap_arch}
-BuildRequires:  gprbuild
+BuildRequires:  gprbuild > 2018-10
 BuildRequires:  gcc-gnat
 BuildRequires:  fedora-gnat-project-common >= 2
 %endif
@@ -162,7 +162,7 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
-* Sat Feb  9 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-6
+* Sat Feb  9 2019 Pavel Zhukov <pzhukov@redhat.com> - 2018-7
 - Rebuld with new gnat-rpm-macros
 - Build with gprbuild 2018
 
