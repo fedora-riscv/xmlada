@@ -6,7 +6,7 @@
 
 Name:           xmlada
 Version:        2019
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -162,6 +162,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Wed Jul 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2019-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Mon Feb 3 2020 Björn Persson <Bjorn@Rombobjörn.se> - 2019-1
 - Upgraded to the 2019 release.
 
