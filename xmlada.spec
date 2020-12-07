@@ -1,12 +1,12 @@
 ### global bootstrap_arch  %{GPRbuild_arches}
-%global bootstrap_arch  not_bootstrapping
+%global bootstrap_arch   %{GPRbuild_arches}
 ## Set this variable to %{GPRbuild_arches} for bootraping of
 ## gprbuild on new architecture or in case of new magor verion of
 ## gcc-gnat package
 
 Name:           xmlada
 Version:        2019
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -162,6 +162,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Mon Dec 07 2020 Jeff Law <releng@fedoraproject.org> - 2019-4
+- Gcc 11 bootstrap
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2019-3
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
