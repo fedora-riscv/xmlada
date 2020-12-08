@@ -1,12 +1,13 @@
 ### global bootstrap_arch  %{GPRbuild_arches}
-%global bootstrap_arch   %{GPRbuild_arches}
+%global bootstrap_arch   no_bootstraping
+
 ## Set this variable to %{GPRbuild_arches} for bootraping of
 ## gprbuild on new architecture or in case of new magor verion of
 ## gcc-gnat package
 
 Name:           xmlada
 Version:        2020
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -162,6 +163,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Tue Dec  8 2020 Pavel Zhukov <pzhukov@redhat.com> - 2020-2
+- Disable gprbuild's bootstraping
+
 * Tue Dec  8 2020 Pavel Zhukov <pzhukov@redhat.com> - 2020-1
 - New version v2020
 
