@@ -5,14 +5,14 @@
 ## gcc-gnat package
 
 Name:           xmlada
-Version:        2019
-Release:        4%{?dist}
+Version:        2020
+Release:        1%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
 ## Direct download link is unavailable
 ## http://libre.adacore.com/libre/download/
-Source0:        xmlada-2019-20190429-19B9D-src.tar.gz
+Source0:        xmlada-2020-20200429-19A99-src.tar.gz
 ## Fedora-specific
 Patch2:         %{name}-2016-gprinstall.patch
 
@@ -68,7 +68,7 @@ On architectures without gprbuild installs sources for gprbuild's bootstrap
 %endif
 
 %prep
-%setup -q -n xmlada-2019-20190429-19B9D-src
+%setup -q -n xmlada-2020-20200429-19A99-src
 
 %build
 %ifnarch %{bootstrap_arch}
@@ -162,6 +162,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Tue Dec  8 2020 Pavel Zhukov <pzhukov@redhat.com> - 2020-1
+- New version v2020
+
 * Mon Dec 07 2020 Jeff Law <releng@fedoraproject.org> - 2019-4
 - Gcc 11 bootstrap
 
