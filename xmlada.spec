@@ -7,7 +7,7 @@
 
 Name:           xmlada
 Version:        2020
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -163,6 +163,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Mon Dec 21 2020 Pavel Zhukov <pavel@zhukoff.net> - 2020-3
+- Rebuild. Ali files invalidated by gcc update
+
 * Tue Dec  8 2020 Pavel Zhukov <pzhukov@redhat.com> - 2020-2
 - Disable gprbuild's bootstraping
 
