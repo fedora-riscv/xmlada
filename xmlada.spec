@@ -19,6 +19,7 @@ Patch2:         %{name}-2016-gprinstall.patch
 
 
 
+BuildRequires: make
 %ifnarch %{bootstrap_arch}
 BuildRequires:  gprbuild > 2018-10
 BuildRequires:  gcc-gnat
