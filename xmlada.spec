@@ -7,7 +7,7 @@
 
 Name:           xmlada
 Version:        2020
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        XML library for Ada
 License:        GPLv3+
 URL:            http://libre.adacore.com
@@ -164,6 +164,9 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 %changelog
+* Thu Jan 28 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2020-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Mon Dec 21 2020 Pavel Zhukov <pavel@zhukoff.net> - 2020-3
 - Rebuild. Ali files invalidated by gcc update
 
