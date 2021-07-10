@@ -119,11 +119,6 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %endif
 
 
-%check
-## Verify that there are no runpaths in the compiled libraries.
-%{_rpmconfigdir}/check-rpaths
-
-
 %files
 %license COPYING*
 %doc README.md TODO AUTHORS
