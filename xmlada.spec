@@ -87,6 +87,10 @@ On architectures without gprbuild installs sources for gprbuild's bootstrap
 %prep
 %autosetup -p1
 
+# Revoke bogus exec permissions.
+find . -name '*.gpr' -exec chmod -x {} \;
+find docs -type f -exec chmod -x {} \;
+
 # Set version number.
 sed --in-place --expression 's/18.0w/%{version}/' configure configure.in
 
@@ -118,10 +122,6 @@ export GPRINSTALL_OPTS="--no-manifest \
 # project files.
 make install-relocatable install-static-pic \
      prefix=%{buildroot}%{_prefix} GPROPTS="${GPRINSTALL_OPTS}"
-
-## Revoke exec permissions
-find %{buildroot} -name '*.gpr' -exec chmod -x {} \;
-find %{buildroot}%{_docdir} -type f -exec chmod -x {} \;
 
 install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
@@ -189,6 +189,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Added the Unicode license to cover all code that has been generated using Unicode data.
 - Removed some post-install steps that are no longer required.
 - Static libraries are now build position independent (PIC).
+- Fix permission errors in the prep step; these are source packaging errors.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
