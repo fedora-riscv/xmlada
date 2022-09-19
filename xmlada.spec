@@ -122,12 +122,8 @@ make install-relocatable install-static \
 ## Revoke exec permissions
 find %{buildroot} -name '*.gpr' -exec chmod -x {} \;
 find %{buildroot}%{_docdir} -type f -exec chmod -x {} \;
-## Delete old bash script (not needed now)
-rm -f %{buildroot}%{_bindir}/xmlada-config
+
 install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
-## There is not GNAT programming studio in Fedora
-## To enable GPS plugin delete this string and create subpackage
-rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
 
 %else
@@ -191,6 +187,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Examples are now located in _pkgdocdir/examples.
 - License field now contains an SPDX license expression.
 - Added the Unicode license to cover all code that has been generated using Unicode data.
+- Removed some post-install steps that are no longer required.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
