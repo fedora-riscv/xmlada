@@ -59,6 +59,7 @@ support for validating XML files with XML schemas.
 Summary:        Development files for the XML/Ada library
 Requires:       %{name}%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       fedora-gnat-project-common
+Recommends:     %{name}-doc
 
 %description devel %{common_description_en}
 
@@ -78,6 +79,19 @@ libraries are upgraded.
 
 Other Fedora packages shall require xmlada-devel rather than xmlada-static if
 possible.
+
+
+%package doc
+Summary:        Documentation for the XML/Ada library
+BuildArch:      noarch
+License:        AdaCore-doc AND MIT AND BSD-2-Clause
+# License for the documentation is AdaCore-doc. The Javascript and CSS files
+# that Sphinx includes with the documentation are BSD 2-Clause and MIT-licensed.
+
+%description doc %{common_description_en}
+
+This package contains the documentation in HTML and PDF, and some examples.
+
 
 %else
 
@@ -194,6 +208,11 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 %dir %{_libdir}/%{name}
 %attr(444,-,-) %{_libdir}/%{name}/*.ali
 %{_libdir}/lib%{name}*.so
+
+%files static
+%{_libdir}/lib%{name}*.a
+
+%files doc
 %dir %{_pkgdocdir}
 %{_pkgdocdir}/html
 %{_pkgdocdir}/pdf
@@ -201,9 +220,6 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 # Exclude Sphinx-generated files that aren't needed in the package.
 %exclude %{_pkgdocdir}/html/.buildinfo
 %exclude %{_pkgdocdir}/html/objects.inv
-
-%files static
-%{_libdir}/lib%{name}*.a
 
 %else
 
@@ -236,6 +252,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Removed empty directory '_libdir/static'; it seems to have no purpose.
 - Moved all libraries from '_libdir/xmlada' to '_libdir'.
 - Fix up the symbolic links for the shared libraries.
+- Moved documentation and examples into a separate package.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
