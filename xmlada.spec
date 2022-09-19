@@ -95,7 +95,7 @@ sed --in-place --expression 's/18.0w/%{version}/' configure configure.in
 %configure --enable-build=distrib --enable-shared
 
 # Build the libraries.
-%{make_build} shared static GPROPTS='%{GPRbuild_flags}'
+%{make_build} shared static-pic GPROPTS='%{GPRbuild_flags}'
 
 # Make the documentation.
 make -C docs html latexpdf
@@ -116,7 +116,7 @@ export GPRINSTALL_OPTS="--no-manifest \
 # Install the shared libraries first and then the static ones, because
 # apparently the variant that gprinstall sees first becomes the default in the
 # project files.
-make install-relocatable install-static \
+make install-relocatable install-static-pic \
      prefix=%{buildroot}%{_prefix} GPROPTS="${GPRINSTALL_OPTS}"
 
 ## Revoke exec permissions
@@ -188,6 +188,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - License field now contains an SPDX license expression.
 - Added the Unicode license to cover all code that has been generated using Unicode data.
 - Removed some post-install steps that are no longer required.
+- Static libraries are now build position independent (PIC).
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
