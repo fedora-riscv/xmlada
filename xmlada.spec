@@ -150,6 +150,18 @@ export GPRINSTALL_OPTS="--no-manifest \
 make install-relocatable install-static-pic \
      prefix=%{buildroot}%{_prefix} GPROPTS="${GPRINSTALL_OPTS}"
 
+# Remove all symbolic links in libdir/ and move the libraries from
+# libdir/xmlada to libdir/ itself.
+rm %{buildroot}%{_libdir}/*.so*
+mv %{buildroot}%{_libdir}/%{name}/*.so* %{buildroot}%{_libdir}
+mv %{buildroot}%{_libdir}/%{name}/*.a   %{buildroot}%{_libdir}
+
+# Fix up the symbolic links for the shared libraries.
+for component in dom input_sources schema unicode sax ; do
+    ln --symbolic --force lib%{name}_${component}.so.%{version} \
+       %{buildroot}%{_libdir}/lib%{name}_${component}.so
+done
+
 %else
 
 # Copy the source files.
@@ -169,13 +181,11 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 %license COPYING3 COPYING.RUNTIME
 %doc README* TODO AUTHORS
 %ifnarch %{bootstrap_arch}
-%dir %{_libdir}/%{name}
-%{_libdir}/lib%{name}_dom.so.*
-%{_libdir}/lib%{name}_input_sources.so.*
-%{_libdir}/lib%{name}_schema.so.*
-%{_libdir}/lib%{name}_unicode.so.*
-%{_libdir}/lib%{name}_sax.so.*
-%{_libdir}/%{name}/lib%{name}*.so.*
+%{_libdir}/lib%{name}_dom.so.%{version}
+%{_libdir}/lib%{name}_input_sources.so.%{version}
+%{_libdir}/lib%{name}_schema.so.%{version}
+%{_libdir}/lib%{name}_unicode.so.%{version}
+%{_libdir}/lib%{name}_sax.so.%{version}
 %endif
 
 %ifnarch %{bootstrap_arch}
@@ -183,8 +193,8 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 %files devel
 %{_includedir}/%{name}
 %{_GNAT_project_dir}/%{name}*.gpr
+%dir %{_libdir}/%{name}
 %attr(444,-,-) %{_libdir}/%{name}/*.ali
-%{_libdir}/%{name}/lib%{name}*.so
 %{_libdir}/lib%{name}*.so
 %dir %{_pkgdocdir}
 %{_pkgdocdir}/html
@@ -195,7 +205,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 %exclude %{_pkgdocdir}/html/objects.inv
 
 %files static
-%{_libdir}/%{name}/*.a
+%{_libdir}/lib%{name}*.a
 
 %else
 
@@ -226,6 +236,8 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Improved spec file readability.
 - Marked the source package as architecture independent.
 - Removed empty directory '_libdir/static'; it seems to have no purpose.
+- Moved all libraries from '_libdir/xmlada' to '_libdir'.
+- Fix up the symbolic links for the shared libraries.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
