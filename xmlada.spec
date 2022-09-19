@@ -34,8 +34,7 @@ Patch:          %{name}-gprinstall-relocate-artifacts.patch
 
 BuildRequires:  make
 %ifnarch %{bootstrap_arch}
-BuildRequires:  gprbuild > 2018-10
-BuildRequires:  gcc-gnat
+BuildRequires:  gcc-gnat gprbuild sed
 BuildRequires:  fedora-gnat-project-common
 BuildRequires:  python3-sphinx
 BuildRequires:  python3-sphinx-latex
@@ -209,6 +208,26 @@ for component in dom input_sources schema unicode sax ; do
        %{buildroot}%{_libdir}/lib%{name}_${component}.so
 done
 
+# Make the generated project files architecture-independent.
+for component in dom input schema unicode sax ; do
+    sed --regexp-extended --in-place \
+        '--expression=1i with "directories";' \
+        '--expression=/^--  This project has been generated/d' \
+        '--expression=s|^( *for +Source_Dirs +use +).*;$|\1(Directories.Includedir \& "/'%{name}/${component}'");|i' \
+        '--expression=s|^( *for +Library_Dir +use +).*;$|\1Directories.Libdir;|i' \
+        '--expression=s|^( *for +Library_ALI_Dir +use +).*;$|\1Directories.Libdir \& "/'%{name}'";|i' \
+        %{buildroot}%{_GNAT_project_dir}/%{name}_${component}.gpr
+    # The Sed commands are:
+    # 1: Insert a with clause before the first line to import the directories
+    #    project.
+    # 2: Delete a comment that mentions the architecture.
+    # 3: Replace the value of Source_Dirs with a pathname based on
+    #    Directories.Includedir.
+    # 4: Replace the value of Library_Dir with Directories.Libdir.
+    # 5: Replace the value of Library_ALI_Dir with a pathname based on
+    #    Directories.Libdir.
+done
+
 %else
 
 # Copy the source files.
@@ -282,6 +301,8 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Moved all libraries from '_libdir/xmlada' to '_libdir'.
 - Fix up the symbolic links for the shared libraries.
 - Moved documentation and examples into a separate package.
+- Made the generated project files architecture-independent.
+- Added a build dependency on sed, removed the explicit version dependency on GPRbuild.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
