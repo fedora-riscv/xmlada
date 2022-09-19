@@ -87,6 +87,7 @@ possible.
 
 %package sources
 Summary:        Sources of the XML/Ada library (for bootstrapping GPRbuild)
+BuildArch:      noarch
 
 %description sources %{common_description_en}
 
@@ -227,6 +228,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Fix permission errors in the prep step; these are source packaging errors.
 - Updated some summaries and descriptions.
 - Improved spec file readability.
+- Marked the source package as architecture independent.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
