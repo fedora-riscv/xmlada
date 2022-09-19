@@ -150,9 +150,6 @@ export GPRINSTALL_OPTS="--no-manifest \
 make install-relocatable install-static-pic \
      prefix=%{buildroot}%{_prefix} GPROPTS="${GPRINSTALL_OPTS}"
 
-install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
-rm -f %{buildroot}/%{_libdir}/%{name}/static/*
-
 %else
 
 # Copy the source files.
@@ -173,7 +170,6 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 %doc README* TODO AUTHORS
 %ifnarch %{bootstrap_arch}
 %dir %{_libdir}/%{name}
-%dir %{_libdir}/%{name}/static
 %{_libdir}/lib%{name}_dom.so.*
 %{_libdir}/lib%{name}_input_sources.so.*
 %{_libdir}/lib%{name}_schema.so.*
@@ -229,6 +225,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Updated some summaries and descriptions.
 - Improved spec file readability.
 - Marked the source package as architecture independent.
+- Removed empty directory '_libdir/static'; it seems to have no purpose.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
