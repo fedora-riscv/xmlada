@@ -41,28 +41,33 @@ BuildRequires:  latexmk
 ExclusiveArch:  %{GPRbuild_arches}
 
 
-%description
-XML/Ada includes support for parsing XML files, including DTDs, 
-full support for SAX, 
-and an almost complete support for the core part of the DOM.
-It includes support for validating XML files with XML schemas.
+%global common_description_en \
+XML/Ada includes support for parsing XML files, including DTDs, full support for \
+SAX, and an almost complete support for the core part of the DOM. It includes \
+support for validating XML files with XML schemas.
+
+%description %{common_description_en}
+
 
 %ifnarch %{bootstrap_arch}
 
 %package devel
-Summary:        XML library for Ada devel package
+Summary:        Development files for the XML/Ada library
 Requires:       %{name}%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       fedora-gnat-project-common
 
-%description devel
-Xml library for ada devel package.
+%description devel %{common_description_en}
+
+This package contains source code and linking information for developing
+applications that use the XML/Ada library.
 
 
 %package static
-Summary:        XML library for Ada, static libraries
+Summary:        Static libraries of XML/Ada
 Requires:       %{name}-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
-%description static
+%description static %{common_description_en}
+
 This package contains the XML/Ada libraries for static linking. It is needed
 for linking GPRbuild statically so that GPRbuild will remain functional when
 libraries are upgraded.
@@ -77,10 +82,12 @@ possible.
 %global debug_package %{nil}
 
 %package sources
-Summary:        Source of XMLada for bootstrapping
+Summary:        Sources of the XML/Ada library (for bootstrapping GPRbuild)
 
-%description sources
-On architectures without gprbuild installs sources for gprbuild's bootstrap
+%description sources %{common_description_en}
+
+This package contains source code for bootstrapping GPRbuild on architectures
+on which GPRbuild is not yet available.
 
 %endif
 
@@ -190,6 +197,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Removed some post-install steps that are no longer required.
 - Static libraries are now build position independent (PIC).
 - Fix permission errors in the prep step; these are source packaging errors.
+- Updated some summaries and descriptions.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
