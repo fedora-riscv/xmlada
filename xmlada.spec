@@ -49,6 +49,10 @@ support for validating XML files with XML schemas.
 %description %{common_description_en}
 
 
+#################
+## Subpackages ##
+#################
+
 %ifnarch %{bootstrap_arch}
 
 %package devel
@@ -91,6 +95,11 @@ on which GPRbuild is not yet available.
 
 %endif
 
+
+#############
+## Prepare ##
+#############
+
 %prep
 %autosetup -p1
 
@@ -100,6 +109,11 @@ find docs -type f -exec chmod -x {} \;
 
 # Set version number.
 sed --in-place --expression 's/18.0w/%{version}/' configure configure.in
+
+
+###########
+## Build ##
+###########
 
 %build
 %ifnarch %{bootstrap_arch}
@@ -115,6 +129,11 @@ make -C docs html latexpdf
 %{configure} --enable-build=distrib
 
 %endif
+
+
+#############
+## Install ##
+#############
 
 %install
 %ifnarch %{bootstrap_arch}
@@ -143,6 +162,10 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 
 %endif
 
+
+###########
+## Files ##
+###########
 
 %files
 %license COPYING3 COPYING.RUNTIME
@@ -184,6 +207,11 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 
 %endif
 
+
+###############
+## Changelog ##
+###############
+
 %changelog
 * Sun Feb 12 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:22.0.0-1
 - Updated to v22.0.0, using the archive available on GitHub.
@@ -198,6 +226,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Static libraries are now build position independent (PIC).
 - Fix permission errors in the prep step; these are source packaging errors.
 - Updated some summaries and descriptions.
+- Improved spec file readability.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
