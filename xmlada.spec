@@ -177,18 +177,16 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 ## Files ##
 ###########
 
+%ifnarch %{bootstrap_arch}
+
 %files
 %license COPYING3 COPYING.RUNTIME
 %doc README* TODO AUTHORS
-%ifnarch %{bootstrap_arch}
 %{_libdir}/lib%{name}_dom.so.%{version}
 %{_libdir}/lib%{name}_input_sources.so.%{version}
 %{_libdir}/lib%{name}_schema.so.%{version}
 %{_libdir}/lib%{name}_unicode.so.%{version}
 %{_libdir}/lib%{name}_sax.so.%{version}
-%endif
-
-%ifnarch %{bootstrap_arch}
 
 %files devel
 %{_includedir}/%{name}
