@@ -15,8 +15,11 @@ Epoch:          2
 Version:        %{upstream_version}
 Release:        1%{?dist}
 Summary:        XML library for Ada
-License:        GPLv3+ with exceptions
 
+License:        GPL-3.0-or-later WITH GCC-exception-3.1 AND Unicode-DFS-2016
+# XML/Ada itself is licensed under GPL v3 or later with a runtime exception. The
+# Unicode license is mentioned as Unicode data files were used as an input for
+# generating some of XML/Ada's source code.
 
 URL:            https://github.com/%{upstream_owner}/%{upstream_name}
 Source0:        %{url}/archive/%{upstream_gittag}/%{upstream_name}-%{upstream_version}.tar.gz
@@ -186,6 +189,8 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Updated the license, a runtime exception has now been added.
 - Added new build dependencies to build the documentation with Sphinx and LaTeX.
 - Examples are now located in _pkgdocdir/examples.
+- License field now contains an SPDX license expression.
+- Added the Unicode license to cover all code that has been generated using Unicode data.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
