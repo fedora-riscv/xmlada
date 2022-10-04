@@ -1,31 +1,40 @@
-### global bootstrap_arch  %{GPRbuild_arches}
-%global bootstrap_arch   no_bootstraping
+# Set this variable to %GPRbuild_arches for bootstrapping of
+# gprbuild on new architecture or in case of new major version of
+# the gcc-gnat package.
+%global bootstrap_arch    no_bootstrapping
+#global bootstrap_arch    %GPRbuild_arches
 
-## Set this variable to %{GPRbuild_arches} for bootraping of
-## gprbuild on new architecture or in case of new magor verion of
-## gcc-gnat package
+# Upstream source information.
+%global upstream_owner    AdaCore
+%global upstream_name     xmlada
+%global upstream_version  22.0.0
+%global upstream_gittag   v%{upstream_version}
 
 Name:           xmlada
-Version:        2020
-Release:        10%{?dist}
+Epoch:          2
+Version:        %{upstream_version}
+Release:        1%{?dist}
 Summary:        XML library for Ada
-License:        GPLv3+
-URL:            http://libre.adacore.com
-## Direct download link is unavailable
-## http://libre.adacore.com/libre/download/
-Source0:        xmlada-2020-20200429-19A99-src.tar.gz
-## Fedora-specific
-Patch2:         %{name}-2016-gprinstall.patch
+License:        GPLv3+ with exceptions
 
 
+URL:            https://github.com/%{upstream_owner}/%{upstream_name}
+Source0:        %{url}/archive/%{upstream_gittag}/%{upstream_name}-%{upstream_version}.tar.gz
 
-BuildRequires: make
+# [Fedora specific] Copy artifacts (docs, examples, etc.) to the correct location.
+Patch:          %{name}-gprinstall-relocate-artifacts.patch
+
+BuildRequires:  make
 %ifnarch %{bootstrap_arch}
 BuildRequires:  gprbuild > 2018-10
 BuildRequires:  gcc-gnat
-BuildRequires:  fedora-gnat-project-common >= 2
+BuildRequires:  fedora-gnat-project-common
+BuildRequires:  python3-sphinx
+BuildRequires:  python3-sphinx-latex
+BuildRequires:  latexmk
 %endif
 
+# Build only on architectures where GPRbuild is available.
 ExclusiveArch:  %{GPRbuild_arches}
 
 
@@ -36,10 +45,11 @@ and an almost complete support for the core part of the DOM.
 It includes support for validating XML files with XML schemas.
 
 %ifnarch %{bootstrap_arch}
+
 %package devel
 Summary:        XML library for Ada devel package
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       fedora-gnat-project-common >= 2
+Requires:       %{name}%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:       fedora-gnat-project-common
 
 %description devel
 Xml library for ada devel package.
@@ -47,7 +57,7 @@ Xml library for ada devel package.
 
 %package static
 Summary:        XML library for Ada, static libraries
-Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+Requires:       %{name}-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description static
 This package contains the XML/Ada libraries for static linking. It is needed
@@ -59,6 +69,8 @@ possible.
 
 %else
 
+# When bootstrapping gprbuild, only a package that contains source code is
+# produced, so a debug package is not needed.
 %global debug_package %{nil}
 
 %package sources
@@ -70,24 +82,39 @@ On architectures without gprbuild installs sources for gprbuild's bootstrap
 %endif
 
 %prep
-%setup -q -n xmlada-2020-20200429-19A99-src
+%autosetup -p1
+
+# Set version number.
+sed --in-place --expression 's/18.0w/%{version}/' configure configure.in
 
 %build
 %ifnarch %{bootstrap_arch}
-%configure --disable-rpath --enable-shared --disable-static --enable-build=distrib
-make shared static GPROPTS="%{Gnatmake_optflags}" prefix=%{buildroot}/%{_prefix}
+%configure --enable-build=distrib --enable-shared
+
+# Build the libraries.
+%{make_build} shared static GPROPTS='%{GPRbuild_flags}'
+
+# Make the documentation.
+make -C docs html latexpdf
+
 %else
-%configure --enable-static --enable-build=distrib
+%{configure} --enable-build=distrib
+
 %endif
 
 %install
 %ifnarch %{bootstrap_arch}
-###export GPRINSTALL_OPTS="--build-name=relocatable --lib-subdir=%{buildroot}/%{_libdir}/%{name} --link-lib-subdir=%{buildroot}/%{_libdir} --sources-subdir=%{buildroot}/%{_includedir}/%{name}"
-export GPRINSTALL_OPTS="--lib-subdir=%{buildroot}/%{_libdir} --link-lib-subdir=%{buildroot}/%{_libdir}"
-## Install the shared libraries first and then the static ones, because
-## apparently the variant that gprinstall sees first becomes the default in the
-## project files.
-make install-relocatable install-static prefix=%{buildroot}/%{_prefix} GPROPTS="${GPRINSTALL_OPTS}" PSUB="share/gpr"
+
+export GPRINSTALL_OPTS="--no-manifest \
+       --ali-subdir=%{buildroot}%{_libdir} \
+       --lib-subdir=%{buildroot}%{_libdir} \
+       --link-lib-subdir=%{buildroot}%{_libdir}"
+
+# Install the shared libraries first and then the static ones, because
+# apparently the variant that gprinstall sees first becomes the default in the
+# project files.
+make install-relocatable install-static \
+     prefix=%{buildroot}%{_prefix} GPROPTS="${GPRINSTALL_OPTS}"
 
 ## Revoke exec permissions
 find %{buildroot} -name '*.gpr' -exec chmod -x {} \;
@@ -99,29 +126,21 @@ install -d -m 0755 %{buildroot}/%{_libdir}/%{name}/static/
 ## To enable GPS plugin delete this string and create subpackage
 rm -f %{buildroot}/%{_datadir}/gps/plug-ins/%{name}_gps.py*
 rm -f %{buildroot}/%{_libdir}/%{name}/static/*
-## These Sphinx-generated files aren't needed in the package:
-rm %{buildroot}%{_pkgdocdir}/{.buildinfo,objects.inv}
 
-mkdir -p %{buildroot}/%{_datarootdir}/%{name}
-mv %{buildroot}/%{_datarootdir}/examples %{buildroot}/%{_datarootdir}/%{name}
-## GPRinstall's manifest files are architecture-specific because they contain
-## what seems to be checksums of architecture-specific files, so they must not
-## be under _datadir. Their function is apparently undocumented, but my crystal
-## ball tells me that they're used when GPRinstall uninstalls or upgrades
-## packages. The manifest file is therefore irrelevant in this RPM package, so
-## delete it.
-rm -rf %{buildroot}%{_GNAT_project_dir}/manifests
 %else
-mkdir -p %{buildroot}/%{_includedir}/%{name}/sources
-cp -r . %{buildroot}/%{_includedir}/%{name}/sources
-find %{buildroot}/%{_includedir}/%{name}/sources -type f ! -name "*ad[sb]" ! -name "*gpr" -delete
-find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
+
+# Copy the source files.
+mkdir --parents %{buildroot}%{_includedir}/%{name}/sources
+cp -r . %{buildroot}%{_includedir}/%{name}/sources
+find %{buildroot}%{_includedir}/%{name}/sources -type f ! -name "*ad[sb]" ! -name "*gpr" -delete
+find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
+
 %endif
 
 
 %files
-%license COPYING*
-%doc README.md TODO AUTHORS
+%license COPYING3 COPYING.RUNTIME
+%doc README* TODO AUTHORS
 %ifnarch %{bootstrap_arch}
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/static
@@ -133,32 +152,41 @@ find %{buildroot}/%{_includedir}/%{name}/sources -type d -empty -delete
 %{_libdir}/%{name}/lib%{name}*.so.*
 %endif
 
-
-
 %ifnarch %{bootstrap_arch}
+
 %files devel
 %{_includedir}/%{name}
 %{_GNAT_project_dir}/%{name}*.gpr
 %attr(444,-,-) %{_libdir}/%{name}/*.ali
 %{_libdir}/%{name}/lib%{name}*.so
 %{_libdir}/lib%{name}*.so
-%{_pkgdocdir}/*.html
-%{_pkgdocdir}/searchindex.js
-%{_pkgdocdir}/_sources
-%{_pkgdocdir}/_static
-%{_pkgdocdir}/XMLAda.pdf
-%{_datarootdir}/%{name}
-
+%dir %{_pkgdocdir}
+%{_pkgdocdir}/html
+%{_pkgdocdir}/pdf
+%{_pkgdocdir}/examples
+# Exclude Sphinx-generated files that aren't needed in the package.
+%exclude %{_pkgdocdir}/html/.buildinfo
+%exclude %{_pkgdocdir}/html/objects.inv
 
 %files static
 %{_libdir}/%{name}/*.a
 
 %else
+
 %files sources
 %{_includedir}/%{name}
+
 %endif
 
 %changelog
+* Sun Feb 12 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:22.0.0-1
+- Updated to v22.0.0, using the archive available on GitHub.
+- Changed the epoch to mark the new upstream version scheme.
+- Changed the epoch to 2 instead of 1 for consistency with the GNATcoll packages.
+- Updated the license, a runtime exception has now been added.
+- Added new build dependencies to build the documentation with Sphinx and LaTeX.
+- Examples are now located in _pkgdocdir/examples.
+
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
 
