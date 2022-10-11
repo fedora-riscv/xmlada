@@ -1,6 +1,12 @@
-# Set this variable to %GPRbuild_arches for bootstrapping of
-# gprbuild on new architecture or in case of new major version of
-# the gcc-gnat package.
+# To build this package in bootstrap mode, set variable `bootstrap_arch` to
+# `%GPRbuild_arches`. To build this package in normal mode, set `bootstrap_arch`
+# to any value other than a well-known architecture name. Do not leave the
+# `bootstrap_arch` variable empty as this will make the spec syntactically
+# invalid.
+#
+# For more information on building in bootstrap mode, see the `gprbuild`
+# spec-file.
+#
 %global bootstrap_arch    no_bootstrapping
 #global bootstrap_arch    %GPRbuild_arches
 
@@ -43,7 +49,6 @@ BuildRequires:  latexmk
 
 # Build only on architectures where GPRbuild is available.
 ExclusiveArch:  %{GPRbuild_arches}
-
 
 %global common_description_en \
 XML/Ada includes support for parsing XML files, including DTDs, full support for \
