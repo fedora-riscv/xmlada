@@ -1,14 +1,7 @@
-# To build this package in bootstrap mode, set variable `bootstrap_arch` to
-# `%GPRbuild_arches`. To build this package in normal mode, set `bootstrap_arch`
-# to any value other than a well-known architecture name. Do not leave the
-# `bootstrap_arch` variable empty as this will make the spec syntactically
-# invalid.
-#
-# For more information on building in bootstrap mode, see the `gprbuild`
-# spec-file.
-#
-%global bootstrap_arch    no_bootstrapping
-#global bootstrap_arch    %GPRbuild_arches
+# This package has a bootstrap build mode that can be used to create a source
+# code package for bootstrapping GPRbuild. See the 'gprbuild' spec file for more
+# information.
+%bcond_with bootstrap
 
 # Upstream source information.
 %global upstream_owner    AdaCore
@@ -39,7 +32,7 @@ Source1:        xmlada.gpr
 Patch:          %{name}-gprinstall-relocate-artifacts.patch
 
 BuildRequires:  make
-%ifnarch %{bootstrap_arch}
+%if %{without bootstrap}
 BuildRequires:  gcc-gnat gprbuild sed
 BuildRequires:  fedora-gnat-project-common
 BuildRequires:  python3-sphinx
@@ -62,7 +55,7 @@ support for validating XML files with XML schemas.
 ## Subpackages ##
 #################
 
-%ifnarch %{bootstrap_arch}
+%if %{without bootstrap}
 
 %package devel
 Summary:        Development files for the XML/Ada library
@@ -140,7 +133,7 @@ sed --in-place --expression 's/18.0w/%{version}/' configure configure.in
 ###########
 
 %build
-%ifnarch %{bootstrap_arch}
+%if %{without bootstrap}
 %configure --enable-build=distrib --enable-shared
 
 # Build the libraries.
@@ -160,7 +153,7 @@ make -C docs html latexpdf
 #############
 
 %install
-%ifnarch %{bootstrap_arch}
+%if %{without bootstrap}
 
 # Verify that the ALI files of both builds (relocatable and static-pic) match.
 # The verfication is necessary as GPRinstall will overwrite the ALI files during
@@ -248,7 +241,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 ## Files ##
 ###########
 
-%ifnarch %{bootstrap_arch}
+%if %{without bootstrap}
 
 %files
 %license COPYING3 COPYING.RUNTIME
@@ -308,6 +301,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Moved documentation and examples into a separate package.
 - Made the generated project files architecture-independent.
 - Added a build dependency on sed, removed the explicit version dependency on GPRbuild.
+- Bootstrap mode can now be enabled via a configuration option.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
