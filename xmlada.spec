@@ -366,7 +366,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 
 * Sun Mar 15 2015 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-10
 - Create unversioned symlinks
- 
+
 * Sat Feb 14 2015 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-9
 - Rebuild with new gcc 4.9
 
@@ -383,7 +383,7 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - aarch64 now has Ada
 
 * Sun Apr 20 2014 Pavel Zhukov <landgraf@fedoraproject.org> - 2013-4
-- Rebuild for new gcc 
+- Rebuild for new gcc
 
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2013-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
