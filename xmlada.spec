@@ -6,7 +6,7 @@
 # Upstream source information.
 %global upstream_owner    AdaCore
 %global upstream_name     xmlada
-%global upstream_version  22.0.0
+%global upstream_version  23.0.0
 %global upstream_gittag   v%{upstream_version}
 
 Name:           xmlada
@@ -119,10 +119,6 @@ on which GPRbuild is not yet available.
 
 %prep
 %autosetup -p1
-
-# Revoke bogus exec permissions.
-find . -name '*.gpr' -exec chmod -x {} \;
-find docs -type f -exec chmod -x {} \;
 
 # Set version number.
 sed --in-place --expression 's/18.0w/%{version}/' configure configure.in
@@ -280,6 +276,11 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 ###############
 
 %changelog
+* Tue Feb 14 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:23.0.0-1
+- Updated to v23.0.0, using the archive available on GitHub.
+- Removed backport patch for improved Unicode support.
+- Removed fix for file permissions; has been fixed upstream (commit: 9e1bd23).
+
 * Sun Feb 12 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:22.0.0-1
 - Updated to v22.0.0, using the archive available on GitHub.
 - Changed the epoch to mark the new upstream version scheme.
