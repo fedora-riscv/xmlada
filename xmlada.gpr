@@ -1,0 +1,9 @@
+with "xmlada_unicode";
+with "xmlada_sax";
+with "xmlada_input";
+with "xmlada_dom";
+with "xmlada_schema";
+
+project Xmlada is
+   for Source_Dirs use ();
+end Xmlada;

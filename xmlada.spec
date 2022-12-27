@@ -24,6 +24,11 @@ License:        GPL-3.0-or-later WITH GCC-exception-3.1 AND Unicode-DFS-2016
 URL:            https://github.com/%{upstream_owner}/%{upstream_name}
 Source0:        %{url}/archive/%{upstream_gittag}/%{upstream_name}-%{upstream_version}.tar.gz
 
+# XML/Ada's aggregate project file. This project file is normally generated and
+# installed by GPRinstall, but as we'll install each XML/Ada component
+# separately, we need to maintain and install it manually.
+Source1:        xmlada.gpr
+
 # [Fedora specific] Copy artifacts (docs, examples, etc.) to the correct location.
 Patch:          %{name}-gprinstall-relocate-artifacts.patch
 
@@ -153,22 +158,40 @@ make -C docs html latexpdf
 %install
 %ifnarch %{bootstrap_arch}
 
-export GPRINSTALL_OPTS="--no-manifest \
-       --ali-subdir=%{buildroot}%{_libdir} \
-       --lib-subdir=%{buildroot}%{_libdir} \
-       --link-lib-subdir=%{buildroot}%{_libdir}"
+# Install each component.
+for libtype in relocatable static-pic ; do
 
-# Install the shared libraries first and then the static ones, because
-# apparently the variant that gprinstall sees first becomes the default in the
-# project files.
-make install-relocatable install-static-pic \
-     prefix=%{buildroot}%{_prefix} GPROPTS="${GPRINSTALL_OPTS}"
+    for component in dom schema unicode sax ; do
+        gprinstall --create-missing-dirs --no-manifest \
+	           --prefix=%{buildroot}%{_prefix} \
+                   --sources-subdir=%{buildroot}%{_includedir}/%{name}/${component} \
+                   --project-subdir=%{buildroot}%{_GNAT_project_dir} \
+                   --ali-subdir=%{buildroot}%{_libdir}/%{name} \
+                   --lib-subdir=%{buildroot}%{_libdir} \
+                   --link-lib-subdir=%{buildroot}%{_libdir} \
+                   --build-var=LIBRARY_TYPE --build-var=XMLADA_BUILD \
+                   --build-name=${libtype} -XLIBRARY_TYPE=${libtype} \
+                   -P ${component}/%{name}_${component}.gpr
+    done
 
-# Remove all symbolic links in libdir/ and move the libraries from
-# libdir/xmlada to libdir/ itself.
-rm %{buildroot}%{_libdir}/*.so*
-mv %{buildroot}%{_libdir}/%{name}/*.so* %{buildroot}%{_libdir}
-mv %{buildroot}%{_libdir}/%{name}/*.a   %{buildroot}%{_libdir}
+    # The "input" component needs special treatment as its dirname in the source
+    # tree ("input_sources") is not reflected in its GNAT project file
+    # ("xmlada_input.gpr").
+    gprinstall --create-missing-dirs --no-manifest \
+               --prefix=%{buildroot}%{_prefix} \
+               --sources-subdir=%{buildroot}%{_includedir}/%{name}/input \
+               --project-subdir=%{buildroot}%{_GNAT_project_dir} \
+               --ali-subdir=%{buildroot}%{_libdir}/%{name} \
+               --lib-subdir=%{buildroot}%{_libdir} \
+               --link-lib-subdir=%{buildroot}%{_libdir} \
+               --build-var=LIBRARY_TYPE --build-var=XMLADA_BUILD \
+               --build-name=${libtype} -XLIBRARY_TYPE=${libtype} \
+               -P input_sources/%{name}_input.gpr
+done
+
+# Install the aggregate project file ("xmlada.gpr").
+install --mode=u=rw,go=r,a-s --preserve-timestamps \
+         %{SOURCE1} --target-directory=%{buildroot}%{_GNAT_project_dir}
 
 # Fix up the symbolic links for the shared libraries.
 for component in dom input_sources schema unicode sax ; do
@@ -196,15 +219,11 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 %files
 %license COPYING3 COPYING.RUNTIME
 %doc README* TODO AUTHORS
-%{_libdir}/lib%{name}_dom.so.%{version}
-%{_libdir}/lib%{name}_input_sources.so.%{version}
-%{_libdir}/lib%{name}_schema.so.%{version}
-%{_libdir}/lib%{name}_unicode.so.%{version}
-%{_libdir}/lib%{name}_sax.so.%{version}
+%{_libdir}/lib%{name}*.so.%{version}
 
 %files devel
-%{_includedir}/%{name}
 %{_GNAT_project_dir}/%{name}*.gpr
+%{_includedir}/%{name}
 %dir %{_libdir}/%{name}
 %attr(444,-,-) %{_libdir}/%{name}/*.ali
 %{_libdir}/lib%{name}*.so
