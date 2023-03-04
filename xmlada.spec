@@ -158,6 +158,16 @@ make -C docs html latexpdf
 %install
 %ifnarch %{bootstrap_arch}
 
+# Verify that the ALI files of both builds (relocatable and static-pic) match.
+# The verfication is necessary as GPRinstall will overwrite the ALI files during
+# the installation of the static-pic build (which is installed after the
+# relocatable build).
+for component_dir in dom schema unicode sax input_sources ; do
+    diff --exclude "*.a" --exclude "*.so*" --exclude ".cvsignore" \
+         %{_builddir}/%{name}-%{version}/${component_dir}/lib/relocatable \
+         %{_builddir}/%{name}-%{version}/${component_dir}/lib/static-pic
+done
+
 # Install each component.
 for libtype in relocatable static-pic ; do
 
