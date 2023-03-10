@@ -28,9 +28,6 @@ Source0:        %{url}/archive/%{upstream_gittag}/%{upstream_name}-%{upstream_ve
 # separately, we need to maintain and install it manually.
 Source1:        xmlada.gpr
 
-# [Fedora specific] Copy artifacts (docs, examples, etc.) to the correct location.
-Patch:          %{name}-gprinstall-relocate-artifacts.patch
-
 BuildRequires:  make
 %if %{without bootstrap}
 BuildRequires:  gcc-gnat gprbuild sed
@@ -202,6 +199,15 @@ for component in dom input_sources schema unicode sax ; do
        %{buildroot}%{_libdir}/lib%{name}_${component}.so
 done
 
+# Move examples to the _pkgdocdir and remove the remaining empty directories.
+mkdir %{buildroot}%{_pkgdocdir}/examples
+
+mv %{buildroot}%{_datadir}/examples/%{name}/* \
+   %{buildroot}%{_pkgdocdir}/examples/
+
+rmdir %{buildroot}%{_datadir}/examples/%{name}
+rmdir %{buildroot}%{_datadir}/examples
+
 # Make the generated project files architecture-independent.
 for component in dom input schema unicode sax ; do
     sed --regexp-extended --in-place \
@@ -256,12 +262,15 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 
 %files doc
 %dir %{_pkgdocdir}
-%{_pkgdocdir}/html
-%{_pkgdocdir}/pdf
+%{_pkgdocdir}/*.html
+%{_pkgdocdir}/searchindex.js
+%{_pkgdocdir}/_sources
+%{_pkgdocdir}/_static
+%{_pkgdocdir}/XMLAda.pdf
 %{_pkgdocdir}/examples
 # Exclude Sphinx-generated files that aren't needed in the package.
-%exclude %{_pkgdocdir}/html/.buildinfo
-%exclude %{_pkgdocdir}/html/objects.inv
+%exclude %{_pkgdocdir}/.buildinfo
+%exclude %{_pkgdocdir}/objects.inv
 
 %else
 
@@ -280,6 +289,8 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Updated to v23.0.0, using the archive available on GitHub.
 - Removed backport patch for improved Unicode support.
 - Removed fix for file permissions; has been fixed upstream (commit: 9e1bd23).
+- Removed patch gprbuild-gprinstall-relocate-artifacts.patch; move files manually after install.
+- Moved the documentation back to where is was until version 2:22.0.0.
 
 * Sun Feb 12 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:22.0.0-1
 - Updated to v22.0.0, using the archive available on GitHub.
