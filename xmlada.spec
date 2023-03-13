@@ -188,7 +188,7 @@ done
 
 # Install the aggregate project file ("xmlada.gpr").
 install --mode=u=rw,go=r,a-s --preserve-timestamps \
-         %{SOURCE1} --target-directory=%{buildroot}%{_GNAT_project_dir}
+        %{SOURCE1} --target-directory=%{buildroot}%{_GNAT_project_dir}
 
 # Fix up the symbolic links for the shared libraries.
 for component in dom input_sources schema unicode sax ; do
@@ -290,12 +290,14 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 * Sun Feb 12 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:22.0.0-1
 - Updated to v22.0.0, using the archive available on GitHub.
 - Changed the epoch to mark the new upstream version scheme.
-- Changed the epoch to 2 instead of 1 for consistency with the GNATcoll packages.
+- Changed the epoch to 2 instead of 1 for consistency with the GNATcoll
+  packages.
 - Updated the license, a runtime exception has now been added.
 - Added new build dependencies to build the documentation with Sphinx and LaTeX.
 - Examples are now located in _pkgdocdir/examples.
 - License field now contains an SPDX license expression.
-- Added the Unicode license to cover all code that has been generated using Unicode data.
+- Added the Unicode license to cover all code that has been generated using
+  Unicode data.
 - Removed some post-install steps that are no longer required.
 - Static libraries are now build position independent (PIC).
 - Fix permission errors in the prep step; these are source packaging errors.
@@ -307,7 +309,8 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Fix up the symbolic links for the shared libraries.
 - Moved documentation and examples into a separate package.
 - Made the generated project files architecture-independent.
-- Added a build dependency on sed, removed the explicit version dependency on GPRbuild.
+- Added a build dependency on sed, removed the explicit version dependency on
+  GPRbuild.
 - Bootstrap mode can now be enabled via a configuration option.
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2020-10
