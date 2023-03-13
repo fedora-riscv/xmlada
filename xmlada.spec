@@ -283,7 +283,8 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 - Updated to v23.0.0, using the archive available on GitHub.
 - Removed backport patch for improved Unicode support.
 - Removed fix for file permissions; has been fixed upstream (commit: 9e1bd23).
-- Removed patch gprbuild-gprinstall-relocate-artifacts.patch; move files manually after install.
+- Removed patch gprbuild-gprinstall-relocate-artifacts.patch; move files after
+  GPRinstall has run.
 - Moved the documentation back to where is was until version 2:22.0.0.
 
 * Sun Feb 12 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:22.0.0-1
