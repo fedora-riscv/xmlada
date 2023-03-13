@@ -159,34 +159,31 @@ for component_dir in dom schema unicode sax input_sources ; do
 done
 
 # Install each component.
-for libtype in relocatable static-pic ; do
-
-    for component in dom schema unicode sax ; do
-        gprinstall --create-missing-dirs --no-manifest \
-	           --prefix=%{buildroot}%{_prefix} \
-                   --sources-subdir=%{buildroot}%{_includedir}/%{name}/${component} \
-                   --project-subdir=%{buildroot}%{_GNAT_project_dir} \
-                   --ali-subdir=%{buildroot}%{_libdir}/%{name} \
-                   --lib-subdir=%{buildroot}%{_libdir} \
-                   --link-lib-subdir=%{buildroot}%{_libdir} \
-                   --build-var=LIBRARY_TYPE --build-var=XMLADA_BUILD \
-                   --build-name=${libtype} -XLIBRARY_TYPE=${libtype} \
-                   -P ${component}/%{name}_${component}.gpr
-    done
-
-    # The "input" component needs special treatment as its dirname in the source
-    # tree ("input_sources") is not reflected in its GNAT project file
-    # ("xmlada_input.gpr").
+function run_gprinstall {
+    local libtype=$1
+    local component=$2
+    local directory=$3  # directory name in the source tree
     gprinstall --create-missing-dirs --no-manifest \
                --prefix=%{buildroot}%{_prefix} \
-               --sources-subdir=%{buildroot}%{_includedir}/%{name}/input \
+               --sources-subdir=%{buildroot}%{_includedir}/%{name}/${component}\
                --project-subdir=%{buildroot}%{_GNAT_project_dir} \
                --ali-subdir=%{buildroot}%{_libdir}/%{name} \
                --lib-subdir=%{buildroot}%{_libdir} \
                --link-lib-subdir=%{buildroot}%{_libdir} \
                --build-var=LIBRARY_TYPE --build-var=XMLADA_BUILD \
                --build-name=${libtype} -XLIBRARY_TYPE=${libtype} \
-               -P input_sources/%{name}_input.gpr
+               -P ${directory}/%{name}_${component}.gpr
+}
+
+for libtype in relocatable static-pic ; do
+    for component in dom schema unicode sax ; do
+        run_gprinstall ${libtype} ${component} ${component}
+    done
+
+    # The "input" component needs special treatment as its dirname in the source
+    # tree ("input_sources") is not reflected in its GNAT project file
+    # ("xmlada_input.gpr").
+    run_gprinstall ${libtype} input input_sources
 done
 
 # Install the aggregate project file ("xmlada.gpr").
@@ -199,13 +196,10 @@ for component in dom input_sources schema unicode sax ; do
        %{buildroot}%{_libdir}/lib%{name}_${component}.so
 done
 
-# Move examples to the _pkgdocdir and remove the remaining empty directories.
-mkdir %{buildroot}%{_pkgdocdir}/examples
+# Move examples to the _pkgdocdir and remove the remaining empty directory.
+mv --no-target-directory %{buildroot}%{_datadir}/examples/%{name} \
+   %{buildroot}%{_pkgdocdir}/examples
 
-mv %{buildroot}%{_datadir}/examples/%{name}/* \
-   %{buildroot}%{_pkgdocdir}/examples/
-
-rmdir %{buildroot}%{_datadir}/examples/%{name}
 rmdir %{buildroot}%{_datadir}/examples
 
 # Make the generated project files architecture-independent.
