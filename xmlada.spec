@@ -12,7 +12,7 @@
 Name:           xmlada
 Epoch:          2
 Version:        %{upstream_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XML library for Ada
 
 License:        GPL-3.0-or-later WITH GCC-exception-3.1 AND Unicode-DFS-2016
@@ -31,7 +31,8 @@ Source1:        xmlada.gpr
 BuildRequires:  make
 %if %{without bootstrap}
 BuildRequires:  gcc-gnat gprbuild sed
-BuildRequires:  fedora-gnat-project-common
+# A fedora-gnat-project-common that contains GPRbuild_flags is needed.
+BuildRequires:  fedora-gnat-project-common >= 3.17
 BuildRequires:  python3-sphinx
 BuildRequires:  python3-sphinx-latex
 BuildRequires:  latexmk
@@ -279,6 +280,10 @@ find %{buildroot}%{_includedir}/%{name}/sources -type d -empty -delete
 ###############
 
 %changelog
+* Mon Mar 13 2023 Björn Persson <Bjorn@Rombobjörn.se> - 2:23.0.0-2
+- Set a minimum version of fedora-gnat-project-common.
+- Simplified the install section a bit.
+
 * Tue Feb 14 2023 Dennis van Raaij <dvraaij@fedoraproject.org> - 2:23.0.0-1
 - Updated to v23.0.0, using the archive available on GitHub.
 - Removed backport patch for improved Unicode support.
