@@ -38,9 +38,6 @@ BuildRequires:  python3-sphinx-latex
 BuildRequires:  latexmk
 %endif
 
-# Build only on architectures where GPRbuild is available.
-ExclusiveArch:  %{GPRbuild_arches}
-
 %global common_description_en \
 XML/Ada includes support for parsing XML files, including DTDs, full support for \
 SAX, and an almost complete support for the core part of the DOM. It includes \
