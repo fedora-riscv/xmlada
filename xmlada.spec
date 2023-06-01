@@ -1,7 +1,7 @@
 # This package has a bootstrap build mode that can be used to create a source
 # code package for bootstrapping GPRbuild. See the 'gprbuild' spec file for more
 # information.
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 # Upstream source information.
 %global upstream_owner    AdaCore
